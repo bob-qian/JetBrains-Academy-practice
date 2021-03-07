@@ -3,33 +3,23 @@ package machine;
 import java.util.Scanner;
 
 public class CoffeeMachine {
+    private static Scanner scnr = new Scanner(System.in);
+
     public static void main(String[] args) {
-        /*System.out.println("Starting to make a coffee");
-        System.out.println("Grinding coffee beans");
-        System.out.println("Boiling water");
-        System.out.println("Mixing boiled water with crushed coffee beans");
-        System.out.println("Pouring coffee into the cup");
-        System.out.println("Pouring some milk into the cup");
-        System.out.println("Coffee is ready!");*/
 
-        Scanner scnr = new Scanner(System.in);
-
-        System.out.println("Write how many ml of water the coffee machine has:");
-        int inputWater = scnr.nextInt();
-
-        System.out.println("Write how many ml of milk the coffee machine has:");
-        int inputMilk = scnr.nextInt();
-
-        System.out.println("Write how many grams of coffee beans the coffee machine has:");
-        int inputBeans = scnr.nextInt();
 
         // Initialize a new Coffee Machine
-        CoffeeMachine coffee = new CoffeeMachine(inputWater, inputMilk, inputBeans);
+        CoffeeMachine coffee = new CoffeeMachine(400, 540, 120, 9, 550);
+        System.out.println(coffee);
 
-        System.out.println("Write how many cups of coffee you will need:");
-        int cupsCoffee = scnr.nextInt();
+        System.out.println("Write action (buy, fill, take");
+        String action = scnr.nextLine();
 
-        System.out.println(coffee.makeCups(cupsCoffee));
+
+        // If action is fill
+        coffee.fillMachine();
+
+        //System.out.println(coffee.makeCups(cupsCoffee));
 
 
     }
@@ -37,11 +27,72 @@ public class CoffeeMachine {
     private int waterAmt;
     private int milkAmt;
     private int beansAmt;
+    private int cupsAmt;
+    private int moneyAmt;
 
-    public CoffeeMachine(int waterAmt, int milkAmt, int beansAmt) {
+    public CoffeeMachine(int waterAmt, int milkAmt, int beansAmt, int cupsAmt, int moneyAmt) {
         this.waterAmt = waterAmt;
         this.milkAmt = milkAmt;
         this.beansAmt = beansAmt;
+        this.cupsAmt = cupsAmt;
+        this.moneyAmt = moneyAmt;
+    }
+
+    public void addWaterAmt(int waterAmt) {
+        this.waterAmt += waterAmt;
+    }
+
+    public void addMilkAmt(int milkAmt) {
+        this.milkAmt += milkAmt;
+    }
+
+    public void addBeansAmt(int beansAmt) {
+        this.beansAmt += beansAmt;
+    }
+
+    public void addCupsAmt(int cupsAmt) {
+        this.cupsAmt += cupsAmt;
+    }
+
+    public void addMoneyAmt(int moneyAmt) {
+        this.moneyAmt += moneyAmt;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder display = new StringBuilder("The coffee machine has:\n");
+        display.append(this.waterAmt);
+        display.append(" of water\n");
+        display.append(this.milkAmt);
+        display.append(" of milk\n");
+        display.append(this.beansAmt);
+        display.append(" of coffee beans\n");
+        display.append(this.cupsAmt);
+        display.append(" of disposable cups\n");
+        display.append(this.moneyAmt);
+        display.append(" of money\n");
+        return display.toString();
+    }
+
+    public void fillMachine() {
+        System.out.println("Write how many ml of water do you want to add:");
+        int inputWater = scnr.nextInt();
+        this.addWaterAmt(inputWater);
+
+        System.out.println("Write how many ml of milk do you want to add:");
+        int inputMilk = scnr.nextInt();
+        this.addMilkAmt(inputMilk);
+
+        System.out.println("Write how many grams of coffee beans do you want to add:");
+        int inputBeans = scnr.nextInt();
+        this.addBeansAmt(inputBeans);
+
+        System.out.println("Write how many disposable cups of coffee do you want to add:");
+        int inputCups = scnr.nextInt();
+        this.addCupsAmt(inputCups);
+
+        System.out.println();
+        System.out.println(this);
     }
 
     public String makeCups(int cupsCoffee) {
