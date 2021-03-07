@@ -5,42 +5,35 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+    public final Scanner scnr = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner scnr = new Scanner(System.in);
 
         // Initialize new Tic-tac-toe game
         Main tttGame = new Main();
 
         // Set according to user input
-        System.out.print("Enter cells: ");
+        /*System.out.print("Enter cells: ");
         String userInput = scnr.nextLine();
-        tttGame.setGameBoard(userInput);
+        tttGame.setGameBoard(userInput);*/
+
+        // Create empty game
+        tttGame.setGameBoard("_________");
 
         System.out.println(tttGame);
-        //System.out.println(tttGame.analyzeGame());
 
-        boolean inputSuccessful = false;
-        do {
-            System.out.print("Enter the coordinates: ");
-            String coordinates = scnr.nextLine();
-            String[] splitCoordinates = coordinates.split(" ");
+        String currentPlayer = "X";
 
-            try {
-                int x = Integer.parseInt(splitCoordinates[0]);
-                int y = Integer.parseInt(splitCoordinates[1]);
-                inputSuccessful = tttGame.addCoordinates(x, y);
-
-                if ((x > 3 || x < 1) || (y > 3 || y < 1)) {
-                    throw new IndexOutOfBoundsException();
-                }
-            } catch (NumberFormatException excpt) {
-                System.out.println("You should enter numbers!");
-            } catch (IndexOutOfBoundsException excpt) {
-                System.out.println("Coordinates should be from 1 to 3!");
-            } catch (Exception excpt) {
-                System.out.println("Invalid input.");
+        while (tttGame.analyzeGame().equals("Game not finished")) {
+            tttGame.playerTurn(currentPlayer);
+            tttGame.analyzeGame();
+            if (currentPlayer.equals("X")) {
+                currentPlayer = "O";
+            } else {
+                currentPlayer = "X";
             }
-        } while (!inputSuccessful);
+        }
+        System.out.println(tttGame.analyzeGame());
 
     }
 
@@ -75,10 +68,10 @@ public class Main {
         }
     }
 
-    public boolean addCoordinates(int row, int column) {
+    public boolean addCoordinates(int row, int column, String currentPlayer) {
         if (gameBoard[row-1][column-1].equals("_") || gameBoard[row-1][column-1].equals(" ")) {
             // If slot is empty
-            gameBoard[row-1][column-1] = "X";
+            gameBoard[row-1][column-1] = currentPlayer;
             System.out.println(this);
             return true;
         }
@@ -89,7 +82,30 @@ public class Main {
     }
 
 
+    public void playerTurn(String currentPlayer) {
+        boolean inputSuccessful = false;
+        do {
+            System.out.print("Enter the coordinates: ");
+            String coordinates = scnr.nextLine();
+            String[] splitCoordinates = coordinates.split(" ");
 
+            try {
+                int x = Integer.parseInt(splitCoordinates[0]);
+                int y = Integer.parseInt(splitCoordinates[1]);
+                inputSuccessful = this.addCoordinates(x, y, currentPlayer);
+
+                if ((x > 3 || x < 1) || (y > 3 || y < 1)) {
+                    throw new IndexOutOfBoundsException();
+                }
+            } catch (NumberFormatException excpt) {
+                System.out.println("You should enter numbers!");
+            } catch (IndexOutOfBoundsException excpt) {
+                System.out.println("Coordinates should be from 1 to 3!");
+            } catch (Exception excpt) {
+                System.out.println("Invalid input.");
+            }
+        } while (!inputSuccessful);
+    }
 
 
     public String analyzeGame() {
