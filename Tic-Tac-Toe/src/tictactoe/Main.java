@@ -17,7 +17,31 @@ public class Main {
         tttGame.setGameBoard(userInput);
 
         System.out.println(tttGame);
-        System.out.println(tttGame.analyzeGame());
+        //System.out.println(tttGame.analyzeGame());
+
+        boolean inputSuccessful = false;
+        do {
+            System.out.print("Enter the coordinates: ");
+            String coordinates = scnr.nextLine();
+            String[] splitCoordinates = coordinates.split(" ");
+
+            try {
+                int x = Integer.parseInt(splitCoordinates[0]);
+                int y = Integer.parseInt(splitCoordinates[1]);
+                inputSuccessful = tttGame.addCoordinates(x, y);
+
+                if ((x > 3 || x < 1) || (y > 3 || y < 1)) {
+                    throw new IndexOutOfBoundsException();
+                }
+            } catch (NumberFormatException excpt) {
+                System.out.println("You should enter numbers!");
+            } catch (IndexOutOfBoundsException excpt) {
+                System.out.println("Coordinates should be from 1 to 3!");
+            } catch (Exception excpt) {
+                System.out.println("Invalid input.");
+            }
+        } while (!inputSuccessful);
+
     }
 
     private String[][] gameBoard;
@@ -50,6 +74,23 @@ public class Main {
             }
         }
     }
+
+    public boolean addCoordinates(int row, int column) {
+        if (gameBoard[row-1][column-1].equals("_") || gameBoard[row-1][column-1].equals(" ")) {
+            // If slot is empty
+            gameBoard[row-1][column-1] = "X";
+            System.out.println(this);
+            return true;
+        }
+
+        // Else slot is occupied
+        System.out.println("This cell is occupied! Choose another one!");
+        return false;
+    }
+
+
+
+
 
     public String analyzeGame() {
         // Impossible if difference of Xs and Os is 2 or more
