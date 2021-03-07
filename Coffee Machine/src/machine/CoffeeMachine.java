@@ -12,12 +12,25 @@ public class CoffeeMachine {
         CoffeeMachine coffee = new CoffeeMachine(400, 540, 120, 9, 550);
         System.out.println(coffee);
 
-        System.out.println("Write action (buy, fill, take");
+        System.out.println("Write action (buy, fill, take)");
         String action = scnr.nextLine();
 
+        switch (action) {
+            case "buy":
+                //TODO add buy function
+                System.out.println("add buy function");
+                break;
+            case "fill":
+                coffee.fillMachine();
+                break;
+            case "take":
+                //TODO Add take function
+                System.out.println("add take function");
+                break;
+            default:
+                System.out.println("Undefined input");
+        }
 
-        // If action is fill
-        coffee.fillMachine();
 
         //System.out.println(coffee.makeCups(cupsCoffee));
 
