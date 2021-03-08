@@ -10,28 +10,28 @@ public class CoffeeMachine {
 
         // Initialize a new Coffee Machine
         CoffeeMachine coffee = new CoffeeMachine(400, 540, 120, 9, 550);
-        System.out.println(coffee);
 
-        System.out.println("Write action (buy, fill, take)");
-        String action = scnr.nextLine();
+        String action;
 
-        switch (action) {
-            case "buy":
-                coffee.buy();
-                break;
-            case "fill":
-                coffee.fillMachine();
-                break;
-            case "take":
-                coffee.takeMachine();
-                break;
-            default:
-                System.out.println("Undefined input");
-        }
-
-
-        //System.out.println(coffee.makeCups(cupsCoffee));
-
+        do {
+            System.out.println("Write action (buy, fill, take, remaining, exit):");
+            action = scnr.nextLine();
+            switch (action) {
+                case "buy":
+                    System.out.println(coffee.buy());
+                    break;
+                case "fill":
+                    coffee.fillMachine();
+                    break;
+                case "take":
+                    coffee.takeMachine();
+                    break;
+                case "remaining":
+                    System.out.println();
+                    System.out.println(coffee);
+                    break;
+            }
+        } while (!action.equals("exit"));
 
     }
 
@@ -79,44 +79,50 @@ public class CoffeeMachine {
         display.append(this.beansAmt);
         display.append(" of coffee beans\n");
         display.append(this.cupsAmt);
-        display.append(" of disposable cups\n");
+        display.append(" of disposable cups\n$");
         display.append(this.moneyAmt);
         display.append(" of money\n");
         return display.toString();
     }
 
     public void fillMachine() {
-        System.out.println("Write how many ml of water do you want to add:");
-        int inputWater = scnr.nextInt();
-        this.addWaterAmt(inputWater);
-
-        System.out.println("Write how many ml of milk do you want to add:");
-        int inputMilk = scnr.nextInt();
-        this.addMilkAmt(inputMilk);
-
-        System.out.println("Write how many grams of coffee beans do you want to add:");
-        int inputBeans = scnr.nextInt();
-        this.addBeansAmt(inputBeans);
-
-        System.out.println("Write how many disposable cups of coffee do you want to add:");
-        int inputCups = scnr.nextInt();
-        this.addCupsAmt(inputCups);
-
         System.out.println();
-        System.out.println(this);
+
+        // NOTE: nextInt() does not read the newline character so we use nextLine() and convert to int
+        try {
+            System.out.println("Write how many ml of water do you want to add:");
+            String input = scnr.nextLine();
+            this.addWaterAmt(Integer.parseInt(input));
+
+            System.out.println("Write how many ml of milk do you want to add:");
+            input = scnr.nextLine();
+            this.addMilkAmt(Integer.parseInt(input));
+
+            System.out.println("Write how many grams of coffee beans do you want to add:");
+            input = scnr.nextLine();
+            this.addBeansAmt(Integer.parseInt(input));
+
+            System.out.println("Write how many disposable cups of coffee do you want to add:");
+            input = scnr.nextLine();
+            this.addCupsAmt(Integer.parseInt(input));
+            System.out.println();
+        } catch (NumberFormatException e) {
+            System.out.println("Not a number!\n");
+            return;
+        }
     }
 
     public void takeMachine() {
-        System.out.printf("I gave you $%d\n", this.moneyAmt);
+        System.out.printf("\nI gave you $%d\n", this.moneyAmt);
         this.moneyAmt = 0;
-
         System.out.println();
-        System.out.println(this);
     }
 
-    public void buy() {
-        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
-        int coffeeType = scnr.nextInt();
+    public String buy() {
+        System.out.println();
+        System.out.println("What do you want to buy? 1 - espresso, 2 - latte, " +
+                "3 - cappuccino, back - to main menu:");
+        String coffeeType = scnr.nextLine();
 
         int waterNeeded = 0;
         int milkNeeded = 0;
@@ -124,29 +130,41 @@ public class CoffeeMachine {
         int cost = 0;
 
         switch (coffeeType) {
-            case 1:
+            case "1":
                 // Espresso
                 waterNeeded = 250;
                 milkNeeded = 0;
                 beansNeeded = 16;
                 cost = 4;
                 break;
-            case 2:
+            case "2":
                 // Latte
                 waterNeeded = 350;
                 milkNeeded = 75;
                 beansNeeded = 20;
                 cost = 7;
                 break;
-            case 3:
+            case "3":
                 // Cappuccino
                 waterNeeded = 200;
                 milkNeeded = 100;
                 beansNeeded = 12;
                 cost = 6;
                 break;
+            case "back":
+                return "";
             default:
                 System.out.println("Invalid order");
+        }
+
+        if (this.waterAmt < waterNeeded) {
+            return "Sorry, not enough water!\n";
+        }
+        if (this.milkAmt < milkNeeded) {
+            return "Sorry, not enough milk!n";
+        }
+        if (this.beansAmt < beansNeeded) {
+            return "Sorry, not enough beans!\n";
         }
 
         this.waterAmt -= waterNeeded;
@@ -154,9 +172,8 @@ public class CoffeeMachine {
         this.beansAmt -= beansNeeded;
         this.cupsAmt -= 1;
         this.moneyAmt += cost;
+        return "I have enough resources, making you a coffee!\n";
 
-        System.out.println();
-        System.out.println(this);
     }
 
     public String makeCups(int cupsCoffee) {
