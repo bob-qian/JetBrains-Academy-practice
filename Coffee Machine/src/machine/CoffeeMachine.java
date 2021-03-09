@@ -72,16 +72,11 @@ public class CoffeeMachine {
     @Override
     public String toString() {
         StringBuilder display = new StringBuilder("The coffee machine has:\n");
-        display.append(this.waterAmt);
-        display.append(" of water\n");
-        display.append(this.milkAmt);
-        display.append(" of milk\n");
-        display.append(this.beansAmt);
-        display.append(" of coffee beans\n");
-        display.append(this.cupsAmt);
-        display.append(" of disposable cups\n$");
-        display.append(this.moneyAmt);
-        display.append(" of money\n");
+        display.append(this.waterAmt).append(" of water\n");
+        display.append(this.milkAmt).append(" of milk\n");
+        display.append(this.beansAmt).append(" of coffee beans\n");
+        display.append(this.cupsAmt).append(" of disposable cups\n$");
+        display.append(this.moneyAmt).append(" of money\n");
         return display.toString();
     }
 
