@@ -8,19 +8,36 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String secretCode = "9305";
-
         Scanner scnr = new Scanner(System.in);
 
+        System.out.println("Please, enter the secret code's length:");
         int userLength = scnr.nextInt();
-        System.out.println(generateSecretCode(userLength));
+        scnr.nextLine();
+        String secretCode = generateSecretCode(userLength);
 
-        /*String userGuess = scnr.nextLine();
-        System.out.println(findBullsAndCows(secretCode, userGuess));*/
+        if (secretCode.equals("Error")) {
+            System.out.println("Error");
+        } else {
+            System.out.println("Okay, let's start a game!");
 
+            //System.out.println(secretCode);
 
+            boolean gameFinished = false;
+            int turnNumber = 1;
 
+            do {
+                System.out.println("Turn " + turnNumber + ":");
+                int[] result = findBullsAndCows(secretCode, scnr.nextLine());
+                System.out.println(outputBullsAndCows(result));
 
+                if (result[0] == secretCode.length() && result[1] == 0) {
+                    System.out.println("Congratulations! You guessed the secret code.");
+                    gameFinished = true;
+                }
+
+                turnNumber += 1;
+            } while (!gameFinished);
+        }
     }
 
     public static String generateSecretCode(int length) {
@@ -65,10 +82,10 @@ public class Main {
             }
         } while (!codeGenerated);
 
-        return "The random secret number is " + secretCode.toString() + ".";
+        return secretCode.toString();
     }
 
-    public static String findBullsAndCows(String secretCode, String userGuess) {
+    public static int[] findBullsAndCows(String secretCode, String userGuess) {
 
         // Init Set containing digits of secret code
         String[] secretCodeSplit = secretCode.split("");
@@ -88,20 +105,33 @@ public class Main {
             }
         }
 
+        return new int[] {numBulls, numCows};
+    }
+
+    public static String outputBullsAndCows(int[] bullsAndCows) {
         StringBuilder output = new StringBuilder("Grade: ");
 
-        if (numBulls > 0 && numCows > 0) {
-            output.append(Integer.toString(numBulls) + " bull(s) and ");
-            output.append(Integer.toString(numCows) + " cow(s). ");
-        } else if (numBulls > 0) {
-            output.append(Integer.toString(numBulls) + " bull(s). ");
-        } else if (numCows > 0) {
-            output.append(Integer.toString(numCows) + " cow(s). ");
+        String bull = " bulls ";
+        String cow = " cows ";
+
+        if (bullsAndCows[0] == 1) {
+            bull = " bull ";
+        }
+
+        if (bullsAndCows[1] == 1) {
+            cow = " cow ";
+        }
+
+        if (bullsAndCows[0] > 0 && bullsAndCows[1] > 0) {
+            output.append(Integer.toString(bullsAndCows[0]) + bull + "and ");
+            output.append(Integer.toString(bullsAndCows[1]) + cow);
+        } else if (bullsAndCows[0] > 0) {
+            output.append(Integer.toString(bullsAndCows[0]) + bull);
+        } else if (bullsAndCows[1] > 0) {
+            output.append(Integer.toString(bullsAndCows[1]) + cow);
         } else {
             output.append("None. ");
         }
-        output.append("The secret code is " + secretCode);
-
         return output.toString();
     }
 }
