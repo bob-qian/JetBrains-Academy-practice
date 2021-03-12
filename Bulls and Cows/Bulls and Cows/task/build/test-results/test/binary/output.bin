@@ -1,15 +1,20 @@
 [1;31m
 Start test 1[0m
-> 3601
-8Grade: 1 bull(s) and 1 cow(s). The secret code is 9305
-*Why 9305? Make your own secret number :)
+> 4
+#The random secret number is 8463.
 [1;31m
 Start test 2[0m
-> 9305
-+Grade: 4 bull(s). The secret code is 9305
-*Why 9305? Make your own secret number :)
+> 1
+ The random secret number is 7.
 [1;31m
 Start test 3[0m
-> 1246
-&Grade: None. The secret code is 9305
-*Why 9305? Make your own secret number :)
+> 11
+Error
+[1;31m
+Start test 4[0m
+> 6
+%The random secret number is 798120.
+[1;31m
+Start test 5[0m
+> 3
+"The random secret number is 891.

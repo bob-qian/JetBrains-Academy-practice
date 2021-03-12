@@ -12,13 +12,60 @@ public class Main {
 
         Scanner scnr = new Scanner(System.in);
 
-        String userGuess = scnr.nextLine();
+        int userLength = scnr.nextInt();
+        System.out.println(generateSecretCode(userLength));
 
-        System.out.println(findBullsAndCows(secretCode, userGuess));
+        /*String userGuess = scnr.nextLine();
+        System.out.println(findBullsAndCows(secretCode, userGuess));*/
 
 
 
 
+    }
+
+    public static String generateSecretCode(int length) {
+        boolean codeGenerated = false;
+        long pseudoRandomNumber;
+        HashSet<Character> digitsAlreadyAdded = new HashSet<>();
+        StringBuilder secretCode;
+
+        do {
+            pseudoRandomNumber = System.nanoTime();
+            //System.out.println(pseudoRandomNumber);
+
+            // convert to a string
+            String randomNumber = Long.toString(pseudoRandomNumber);
+
+            if (randomNumber.length() < length || length > 10) {
+                return "Error";
+            }
+
+            digitsAlreadyAdded.clear();
+
+            secretCode = new StringBuilder();
+
+            int i = randomNumber.length()-1;
+            while (secretCode.length() < length && i >= 0) {
+                char currentDigit = randomNumber.charAt(i);
+
+                if (digitsAlreadyAdded.size() == 0 && currentDigit == '0') {
+                    i -= 1;
+                    continue;
+                }
+
+                if (!digitsAlreadyAdded.contains(currentDigit)) {
+                    secretCode.append(currentDigit);
+                    digitsAlreadyAdded.add(currentDigit);
+                }
+                i -= 1;
+            }
+
+            if (secretCode.length() == length) {
+                codeGenerated = true;
+            }
+        } while (!codeGenerated);
+
+        return "The random secret number is " + secretCode.toString() + ".";
     }
 
     public static String findBullsAndCows(String secretCode, String userGuess) {
