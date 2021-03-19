@@ -1,9 +1,6 @@
 package bullscows;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -11,38 +8,54 @@ public class Main {
 
         Scanner scnr = new Scanner(System.in);
 
-        System.out.println("Input the length of the secret code:");
-        int userLength = scnr.nextInt();
-        scnr.nextLine();
+        try {
+            System.out.println("Input the length of the secret code:");
+            int userLength = scnr.nextInt();
+            scnr.nextLine();
+            if (userLength < 1) {
+                throw new IllegalArgumentException("Error: code length must be at least 1.");
+            }
 
-        System.out.println("Input the number of possible symbols in the code:");
-        int maxSymbols = scnr.nextInt();
-        scnr.nextLine();
+            System.out.println("Input the number of possible symbols in the code:");
+            int maxSymbols = scnr.nextInt();
+            scnr.nextLine();
+            if (maxSymbols > 36) {
+                throw new IllegalArgumentException("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).");
+            }
 
-        String secretCode = generateSecretCode(userLength, maxSymbols);
+            if (maxSymbols < userLength) {
+                throw new IllegalArgumentException("Error: it's not possible to generate a code with a length of " +
+                        userLength + " with " + maxSymbols + " unique symbols.");
+            }
+            String secretCode = generateSecretCode(userLength, maxSymbols);
 
-        if (secretCode.equals("Error")) {
-            System.out.println("Error");
-        } else {
-            System.out.println("Okay, let's start a game!");
+            if (secretCode.equals("Error")) {
+                System.out.println("Error");
+            } else {
+                System.out.println("Okay, let's start a game!");
 
-            // System.out.println(secretCode);
+                // System.out.println(secretCode);
 
-            boolean gameFinished = false;
-            int turnNumber = 1;
+                boolean gameFinished = false;
+                int turnNumber = 1;
 
-            do {
-                System.out.println("Turn " + turnNumber + ":");
-                int[] result = findBullsAndCows(secretCode, scnr.nextLine());
-                System.out.println(outputBullsAndCows(result));
+                do {
+                    System.out.println("Turn " + turnNumber + ":");
+                    int[] result = findBullsAndCows(secretCode, scnr.nextLine());
+                    System.out.println(outputBullsAndCows(result));
 
-                if (result[0] == secretCode.length() && result[1] == 0) {
-                    System.out.println("Congratulations! You guessed the secret code.");
-                    gameFinished = true;
-                }
+                    if (result[0] == secretCode.length() && result[1] == 0) {
+                        System.out.println("Congratulations! You guessed the secret code.");
+                        gameFinished = true;
+                    }
 
-                turnNumber += 1;
-            } while (!gameFinished);
+                    turnNumber += 1;
+                } while (!gameFinished);
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Error: not a valid number.");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
