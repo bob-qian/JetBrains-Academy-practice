@@ -2,6 +2,7 @@ package bullscows;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -41,46 +42,32 @@ public class Main {
     }
 
     public static String generateSecretCode(int length) {
-        boolean codeGenerated = false;
-        long pseudoRandomNumber;
-        HashSet<Character> digitsAlreadyAdded = new HashSet<>();
+        if (length > 10) {
+            return "Error";
+        }
+
+        Random random = new Random();
+        int randomDigit;
+        HashSet<Integer> digitsAlreadyAdded = new HashSet<>();
         StringBuilder secretCode;
 
-        do {
-            pseudoRandomNumber = System.nanoTime();
-            //System.out.println(pseudoRandomNumber);
 
-            // convert to a string
-            String randomNumber = Long.toString(pseudoRandomNumber);
+        digitsAlreadyAdded.clear();
+        secretCode = new StringBuilder();
 
-            if (randomNumber.length() < length || length > 10) {
-                return "Error";
+        while (secretCode.length() < length) {
+            randomDigit = random.nextInt(9);
+
+            if (digitsAlreadyAdded.size() == 0 && randomDigit == 0) {
+                continue;
             }
 
-            digitsAlreadyAdded.clear();
-
-            secretCode = new StringBuilder();
-
-            int i = randomNumber.length()-1;
-            while (secretCode.length() < length && i >= 0) {
-                char currentDigit = randomNumber.charAt(i);
-
-                if (digitsAlreadyAdded.size() == 0 && currentDigit == '0') {
-                    i -= 1;
-                    continue;
-                }
-
-                if (!digitsAlreadyAdded.contains(currentDigit)) {
-                    secretCode.append(currentDigit);
-                    digitsAlreadyAdded.add(currentDigit);
-                }
-                i -= 1;
+            if (!digitsAlreadyAdded.contains(randomDigit)) {
+                secretCode.append(Integer.toString(randomDigit));
+                digitsAlreadyAdded.add(randomDigit);
+                System.out.println(secretCode);
             }
-
-            if (secretCode.length() == length) {
-                codeGenerated = true;
-            }
-        } while (!codeGenerated);
+        }
 
         return secretCode.toString();
     }
