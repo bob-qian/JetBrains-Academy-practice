@@ -11,17 +11,22 @@ public class Main {
 
         Scanner scnr = new Scanner(System.in);
 
-        System.out.println("Please, enter the secret code's length:");
+        System.out.println("Input the length of the secret code:");
         int userLength = scnr.nextInt();
         scnr.nextLine();
-        String secretCode = generateSecretCode(userLength);
+
+        System.out.println("Input the number of possible symbols in the code:");
+        int maxSymbols = scnr.nextInt();
+        scnr.nextLine();
+
+        String secretCode = generateSecretCode(userLength, maxSymbols);
 
         if (secretCode.equals("Error")) {
             System.out.println("Error");
         } else {
             System.out.println("Okay, let's start a game!");
 
-            //System.out.println(secretCode);
+            // System.out.println(secretCode);
 
             boolean gameFinished = false;
             int turnNumber = 1;
@@ -41,33 +46,60 @@ public class Main {
         }
     }
 
-    public static String generateSecretCode(int length) {
-        if (length > 10) {
+    public static String generateSecretCode(int length, int maxSymbols) {
+        if (length > 36) {
             return "Error";
         }
 
         Random random = new Random();
+        int randomNumber;
         int randomDigit;
-        HashSet<Integer> digitsAlreadyAdded = new HashSet<>();
-        StringBuilder secretCode;
+        char randomChar;
 
+        HashSet<Integer> digitsAlreadyAdded = new HashSet<>();
+        HashSet<Character> symbolsAlreadyAdded = new HashSet<>();
+        StringBuilder secretCode;
 
         digitsAlreadyAdded.clear();
         secretCode = new StringBuilder();
 
-        while (secretCode.length() < length) {
-            randomDigit = random.nextInt(9);
+        // Generate next random digit or character
+        while ((secretCode.length() < length)) {
+            randomNumber = random.nextInt(maxSymbols);
 
-            if (digitsAlreadyAdded.size() == 0 && randomDigit == 0) {
-                continue;
-            }
+            if (randomNumber < 10) {
+                randomDigit = randomNumber;
 
-            if (!digitsAlreadyAdded.contains(randomDigit)) {
-                secretCode.append(Integer.toString(randomDigit));
-                digitsAlreadyAdded.add(randomDigit);
-                System.out.println(secretCode);
+                // Add digit to secret code if unique
+                if (!digitsAlreadyAdded.contains(randomDigit)) {
+                    secretCode.append(Integer.toString(randomDigit));
+                    digitsAlreadyAdded.add(randomDigit);
+                }
+            } else {
+                randomChar = (char)(randomNumber - 10 + 'a');
+
+                // Add symbol to secret code if unique
+                if (!symbolsAlreadyAdded.contains(randomChar)) {
+                    secretCode.append(Character.toString(randomChar));
+                    symbolsAlreadyAdded.add(randomChar);
+                }
             }
         }
+
+        // Output hidden secretCode
+        StringBuilder hiddenCode = new StringBuilder("The secret is prepared: ");
+        for (int i = 0; i < length; i++) {
+            hiddenCode.append("*");
+        }
+        hiddenCode.append(" (0-9)");
+        if (!(maxSymbols < 10)) {
+            hiddenCode.deleteCharAt(hiddenCode.length() - 1);
+            hiddenCode.append(", a-");
+            char lastLetter = (char)((maxSymbols-1) - 10 + 'a');
+            hiddenCode.append(lastLetter + ")");
+        }
+        hiddenCode.append(".");
+        System.out.println(hiddenCode);
 
         return secretCode.toString();
     }
