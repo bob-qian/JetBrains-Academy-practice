@@ -24,6 +24,24 @@ public class Main {
             } while (!processStatus.equals("success"));
             System.out.println("\n" + userMap);
         }
+
+        // Clear the process status for next loop, taking shots
+        processStatus = "";
+        System.out.println("The game starts!\n");
+        BattleshipMap opponentShootingMap = new BattleshipMap();
+        System.out.println(opponentShootingMap);
+
+        // Loop to take shots
+        System.out.println("Take a shot!\n");
+        do {
+            String userShot = scnr.nextLine();
+            processStatus = userMap.takeShot(userShot, opponentShootingMap);
+            if (!processStatus.equals("success")) {
+                System.out.println("\n" + processStatus + " Try again:\n");
+            }
+        } while (!processStatus.equals("success"));
+
+        System.out.println("\n" + userMap);
     }
 
     private static LinkedHashMap<String, Integer> shipsAndLengths = new LinkedHashMap<>();
@@ -49,6 +67,34 @@ public class Main {
                     map.put(rows[i]+columns[j], "~");
                 }
             }
+        }
+
+        public HashMap<String, String> getMap() {
+            return map;
+        }
+
+        public String takeShot(String cell, BattleshipMap opponentShootingMap) {
+            String cellBeingShot = map.get(cell);
+
+            if (cellBeingShot == null) {
+                return("Error! You entered the wrong coordinates!");
+            }
+
+            if (cellBeingShot.equals("O")) {
+                map.put(cell, "X");
+                opponentShootingMap.getMap().put(cell, "X");
+
+                System.out.println("\n" + opponentShootingMap);
+                System.out.println("You hit a ship!");
+            } else {
+                map.put(cell, "M");
+                opponentShootingMap.getMap().put(cell, "M");
+
+                System.out.println("\n" + opponentShootingMap);
+                System.out.println("You missed!");
+            }
+
+            return "success";
         }
 
         public String addShip(String[] cells, String shipType)
