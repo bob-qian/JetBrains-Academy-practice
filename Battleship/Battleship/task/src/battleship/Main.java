@@ -17,25 +17,29 @@ public class Main {
         BattleshipMap userMap = new BattleshipMap();
         System.out.println(userMap);
 
-        setUpShips(userMap);
-        
-        // Clear the process status for next loop, taking shots
-        String processStatus = "";
+        //setUpShips(userMap);
+
+        // Temporary code to pre-initialize game status
+        userMap.addShip(new String[]{"F3", "F7"}, "Aircraft Carrier");
+        userMap.addShip(new String[]{"A1", "D1"}, "Battleship");
+        userMap.addShip(new String[]{"J10", "J8"}, "Submarine");
+        userMap.addShip(new String[]{"B9", "D9"}, "Cruiser");
+        userMap.addShip(new String[]{"I2", "J2"}, "Destroyer");
+        System.out.println(userMap);
+
         System.out.println("The game starts!\n");
         BattleshipMap opponentShootingMap = new BattleshipMap();
         System.out.println(opponentShootingMap);
 
-        // Loop to take shots
         System.out.println("Take a shot!\n");
         do {
-            String userShot = scnr.nextLine();
-            processStatus = userMap.takeShot(userShot, opponentShootingMap);
-            if (!processStatus.equals("success")) {
-                System.out.println("\n" + processStatus + " Try again:\n");
+            processOneShot(userMap, opponentShootingMap);
+            if (!userMap.isDefeated()) {
+                System.out.println("Try again:\n");
             }
-        } while (!processStatus.equals("success"));
+        } while (!userMap.isDefeated());
 
-        System.out.println("\n" + userMap);
+        System.out.println("You sank the last ship. You won. Congratulations!");
     }
 
     /**
@@ -58,6 +62,19 @@ public class Main {
             } while (!processStatus.equals("success"));
             System.out.println("\n" + inputMap);
         }
+    }
+
+    private static void processOneShot(BattleshipMap userMap, BattleshipMap opponentShootingMap) {
+        String processStatus = "";
+
+        // Loop to take shots
+        do {
+            String userShot = scnr.nextLine();
+            processStatus = userMap.takeShot(userShot, opponentShootingMap);
+            if (!processStatus.equals("success")) {
+                System.out.println("\n" + processStatus + " Try again:\n");
+            }
+        } while (!processStatus.equals("success"));
     }
 
     private static LinkedHashMap<String, Integer> shipsAndLengths = new LinkedHashMap<>();
@@ -110,7 +127,7 @@ public class Main {
          * to the shooter on the visible map (opponentShootingMap).
          * @param cell the cell location of the "shot"
          * @param opponentShootingMap visible map that will show shot location
-         * @return String denoting succesful shot ("success") or an error message.
+         * @return String denoting successful shot ("success") or an error message.
          */
         public String takeShot(String cell, BattleshipMap opponentShootingMap) {
             String cellBeingShot = map.get(cell);
@@ -123,17 +140,111 @@ public class Main {
                 map.put(cell, "X");
                 opponentShootingMap.getMap().put(cell, "X");
 
+                boolean shipSunk = DFS(cell);
+                System.out.println("shipsunk" + shipSunk);
+                // Revert the traverse
+                revertTraverse();
+
                 System.out.println("\n" + opponentShootingMap);
-                System.out.println("You hit a ship!");
+                if (shipSunk) {
+                    System.out.println("You sank a ship! Specify a new target:");
+                } else {
+                    System.out.print("You hit a ship! ");
+                }
+            } else if (cellBeingShot.equals("X") || cellBeingShot.equals("M")) {
+                return("Error! You already fired here.");
             } else {
                 map.put(cell, "M");
                 opponentShootingMap.getMap().put(cell, "M");
 
                 System.out.println("\n" + opponentShootingMap);
-                System.out.println("You missed!");
+                System.out.print("You missed. ");
             }
 
             return "success";
+        }
+
+        // Helper method to implement recursive checks on adjacent cells for takeShot method
+        // Returns true if a ship has been sunk and false if not
+        private boolean DFS(String cell) {
+            // Temporarily mark this cell as traversed
+            map.put(cell, "T");
+
+            System.out.println("Current cell's value: " + map.get(cell));
+
+            char row = cell.charAt(0);
+            int col = Integer.parseInt(cell.substring(1));
+
+            // Check upper
+            if (row != 'A') {
+                System.out.println("upper");
+                String upperCell = (char) (row - 1) + String.valueOf(col);
+                System.out.println(upperCell);
+                System.out.println("Value: " + map.get(upperCell));
+
+                if (map.get(upperCell).equals("X")) {
+                    DFS(upperCell);
+                } else if (map.get(upperCell).equals("O")) {
+                    return false;
+                }
+            }
+
+            // Check lower
+            if (row != 'J') {
+                System.out.println("lower");
+                String lowerCell = (char) (row + 1) + String.valueOf(col);
+                System.out.println(lowerCell);
+                System.out.println("Value: " + map.get(lowerCell));
+
+                if (map.get(lowerCell).equals("X")) {
+                    DFS(lowerCell);
+                } else if (map.get(lowerCell).equals("O")) {
+                    return false;
+                }
+            }
+
+            // Check left
+            if (col > 1) {
+                String leftCell = row + String.valueOf(col - 1);
+                if (map.get(leftCell).equals("X")) {
+                    DFS(leftCell);
+                } else if (map.get(leftCell).equals("O")) {
+                    return false;
+                }
+            }
+
+            // Check right
+            if (col < 10) {
+                String rightCell = row + String.valueOf(col + 1);
+                if (map.get(rightCell).equals("X")) {
+                    DFS(rightCell);
+                } else if (map.get(rightCell).equals("O")) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void revertTraverse() {
+            for (String cell : map.keySet()) {
+                if (map.get(cell).equals("T")) {
+                    map.put(cell, "X");
+                }
+            }
+        }
+
+        /**
+         * Returns true if all ships in internal map have been hit (that is, no more Os left)
+         * @return
+         */
+        public boolean isDefeated() {
+            for (String cell : map.keySet()) {
+                if (map.get(cell).equals("O")) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public String addShip(String[] cells, String shipType)
