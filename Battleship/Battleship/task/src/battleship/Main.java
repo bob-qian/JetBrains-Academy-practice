@@ -80,10 +80,6 @@ public class Main {
     private static LinkedHashMap<String, Integer> shipsAndLengths = new LinkedHashMap<>();
 
     private static class BattleshipMap {
-        static final String[] rows = new String[]{"A", "B", "C", "D", "E",
-                "F", "G", "H", "I", "J" };
-        static final String[] columns = new String[]{"1", "2", "3", "4", "5",
-                "6", "7", "8", "9", "10" };
         private HashMap<String, String> map;
 
         /**
@@ -96,9 +92,9 @@ public class Main {
 
             map = new HashMap<>();
             // Populate the battleship map
-            for (int i = 0; i < rows.length; i++) {
-                for (int j = 0; j < columns.length; j++) {
-                    map.put(rows[i]+columns[j], "~");
+            for (int i = 65; i <= 74; i++) {
+                for (int j = 1; j <= 10; j++) {
+                    map.put((char)(i) + String.valueOf(j), "~");
                 }
             }
         }
@@ -396,15 +392,14 @@ public class Main {
         public String toString() {
             StringBuilder displayedMap = new StringBuilder(" ");
 
-            for (String column : columns) {
-                displayedMap.append(" " + column);
+            for (int i = 1; i <= 10; i++) {
+                displayedMap.append(" " + i);
             }
 
-            for (int i = 0; i < rows.length; i++) {
-                displayedMap.append("\n" + rows[i]);
-                for (int j = 0; j < columns.length; j++) {
-                    // key = rows[i] + columns[j]
-                    displayedMap.append(" " + map.get(rows[i] + columns[j]));
+            for (int i = 65; i <= 74; i++) {
+                displayedMap.append("\n" + (char)(i));
+                for (int j = 1; j <= 10; j++) {
+                    displayedMap.append(" " + map.get((char)(i) + String.valueOf(j)));
                 }
             }
 
