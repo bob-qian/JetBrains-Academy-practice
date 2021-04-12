@@ -79,7 +79,6 @@ public class Main {
 
     private static LinkedHashMap<String, Integer> shipsAndLengths = new LinkedHashMap<>();
 
-
     private static class BattleshipMap {
         static final String[] rows = new String[]{"A", "B", "C", "D", "E",
                 "F", "G", "H", "I", "J" };
@@ -140,13 +139,12 @@ public class Main {
                 map.put(cell, "X");
                 opponentShootingMap.getMap().put(cell, "X");
 
-                boolean shipSunk = DFS(cell);
-                System.out.println("shipsunk" + shipSunk);
+                boolean isShipAlive = containsO(cell);
                 // Revert the traverse
                 revertTraverse();
 
                 System.out.println("\n" + opponentShootingMap);
-                if (shipSunk) {
+                if (!isShipAlive) {
                     System.out.println("You sank a ship! Specify a new target:");
                 } else {
                     System.out.print("You hit a ship! ");
@@ -164,66 +162,79 @@ public class Main {
             return "success";
         }
 
+        // Helper method checking bounds
+        protected boolean inBounds(String cell) {
+            char row = cell.charAt(0);
+            int col = Integer.parseInt(cell.substring(1));
+
+            if (row < 'A' || row > 'J') {
+                return false;
+            }
+
+            if (col < 1 || col > 10) {
+                return false;
+            }
+
+            return true;
+        }
+
         // Helper method to implement recursive checks on adjacent cells for takeShot method
         // Returns true if a ship has been sunk and false if not
-        private boolean DFS(String cell) {
+        private boolean containsO(String cell) {
+
             // Temporarily mark this cell as traversed
             map.put(cell, "T");
-
-            System.out.println("Current cell's value: " + map.get(cell));
 
             char row = cell.charAt(0);
             int col = Integer.parseInt(cell.substring(1));
 
-            // Check upper
-            if (row != 'A') {
-                System.out.println("upper");
-                String upperCell = (char) (row - 1) + String.valueOf(col);
-                System.out.println(upperCell);
-                System.out.println("Value: " + map.get(upperCell));
+            String upperCell = (char) (row - 1) + String.valueOf(col);
+            String lowerCell = (char) (row + 1) + String.valueOf(col);
+            String leftCell = row + String.valueOf(col - 1);
+            String rightCell = row + String.valueOf(col + 1);
 
-                if (map.get(upperCell).equals("X")) {
-                    DFS(upperCell);
-                } else if (map.get(upperCell).equals("O")) {
-                    return false;
+            boolean doesUpperContainO = false;
+            boolean doesLowerContainO = false;
+            boolean doesLeftContainO = false;
+            boolean doesRightContainO = false;
+
+            if (inBounds(upperCell)) {
+                if (map.get(upperCell).equals("O")) {
+                    return true;
+                } else if (map.get(upperCell).equals("X")) {
+                    doesUpperContainO = containsO(upperCell);
                 }
             }
 
-            // Check lower
-            if (row != 'J') {
-                System.out.println("lower");
-                String lowerCell = (char) (row + 1) + String.valueOf(col);
-                System.out.println(lowerCell);
-                System.out.println("Value: " + map.get(lowerCell));
-
-                if (map.get(lowerCell).equals("X")) {
-                    DFS(lowerCell);
-                } else if (map.get(lowerCell).equals("O")) {
-                    return false;
+            if (inBounds(lowerCell)) {
+                if (map.get(lowerCell).equals("O")) {
+                    return true;
+                } else if (map.get(lowerCell).equals("X")) {
+                    doesLowerContainO = containsO(lowerCell);
                 }
             }
 
-            // Check left
-            if (col > 1) {
-                String leftCell = row + String.valueOf(col - 1);
-                if (map.get(leftCell).equals("X")) {
-                    DFS(leftCell);
-                } else if (map.get(leftCell).equals("O")) {
-                    return false;
+            if (inBounds(leftCell)) {
+                if (map.get(leftCell).equals("O")) {
+                    return true;
+                } else if (map.get(leftCell).equals("X")) {
+                    doesLeftContainO = containsO(leftCell);
                 }
             }
 
-            // Check right
-            if (col < 10) {
-                String rightCell = row + String.valueOf(col + 1);
-                if (map.get(rightCell).equals("X")) {
-                    DFS(rightCell);
-                } else if (map.get(rightCell).equals("O")) {
-                    return false;
+            if (inBounds(rightCell)) {
+                if (map.get(rightCell).equals("O")) {
+                    return true;
+                } else if (map.get(rightCell).equals("X")) {
+                    doesRightContainO = containsO(rightCell);
                 }
             }
 
-            return true;
+            if (doesUpperContainO || doesLowerContainO || doesLeftContainO || doesRightContainO) {
+                return true;
+            }
+
+            return false;
         }
 
         private void revertTraverse() {
