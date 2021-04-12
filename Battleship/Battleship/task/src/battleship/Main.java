@@ -17,28 +17,15 @@ public class Main {
         BattleshipMap userMap = new BattleshipMap();
         System.out.println(userMap);
 
-        //setUpShips(userMap);
+        setUpShips(userMap);
 
-        preInitializeGameMap(userMap);
+        //preInitializeGameMap(userMap);
 
         System.out.println("The game starts!\n");
         BattleshipMap opponentShootingMap = new BattleshipMap();
         System.out.println(opponentShootingMap);
 
-        System.out.println("Take a shot!\n");
-        do {
-            String shotResult = processOneShot(userMap, opponentShootingMap);
-            if (!userMap.isDefeated()) {
-                System.out.print(shotResult);
-
-                if (shotResult.equals("You sank a ship! Specify a new target:")) {
-                    System.out.println("\n");
-                } else {
-                    System.out.println(" Try again:\n");
-                }
-            }
-        } while (!userMap.isDefeated());
-
+        shootUntilGameEnds(userMap, opponentShootingMap);
         System.out.println("\nYou sank the last ship. You won. Congratulations!");
     }
 
@@ -74,11 +61,29 @@ public class Main {
             shotResult = userMap.takeShot(userShot, opponentShootingMap);
 
             if (shotResult.substring(0, 5).equals("Error")) {
+                System.out.println(userMap);
                 System.out.println("\n" + shotResult + " Try again:\n");
             }
         } while (shotResult.substring(0, 5).equals("Error"));
 
         return(shotResult);
+    }
+
+    // Loops, asking for more shots until all battleships have been sunk
+    private static void shootUntilGameEnds(BattleshipMap userMap, BattleshipMap opponentShootingMap) {
+        System.out.println("Take a shot!\n");
+        do {
+            String shotResult = processOneShot(userMap, opponentShootingMap);
+            if (!userMap.isDefeated()) {
+                System.out.print(shotResult);
+
+                if (shotResult.equals("You sank a ship! Specify a new target:")) {
+                    System.out.println("\n");
+                } else {
+                    System.out.println(" Try again:\n");
+                }
+            }
+        } while (!userMap.isDefeated());
     }
 
     // Pre-initialize game status (skipping manual input of ships)

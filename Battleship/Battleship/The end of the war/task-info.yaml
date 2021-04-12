@@ -370,56 +370,8 @@ files:
     }
   learner_created: false
 feedback_link: https://hyperskill.org/projects/125/stages/666/implement#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #1
-
-    After starting the program, you should request the coordinates of the Aircraft Carrier in that way:
-    &quot;Enter the coordinates of the Aircraft Carrier (5 cells):&quot;
-
-    Please find below the output of your program during this failed test.
-
-    ---
-
-      1 2 3 4 5 6 7 8 9 10
-    A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    C ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    D ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    F ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
-      1 2 3 4 5 6 7 8 9 10
-    A O ~ ~ ~ ~ ~ ~ ~ ~ ~
-    B O ~ ~ ~ ~ ~ ~ ~ O ~
-    C O ~ ~ ~ ~ ~ ~ ~ O ~
-    D O ~ ~ ~ ~ ~ ~ ~ O ~
-    E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    F ~ ~ O O O O O ~ ~ ~
-    G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    I ~ O ~ ~ ~ ~ ~ ~ ~ ~
-    J ~ O ~ ~ ~ ~ ~ O O O
-
-    The game starts!
-
-      1 2 3 4 5 6 7 8 9 10
-    A ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    B ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    C ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    D ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    E ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    F ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    G ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    H ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    I ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-    J ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
-    Take a shot!
-  time: Mon, 12 Apr 2021 19:16:31 UTC
+  message: Congratulations!
+  time: Mon, 12 Apr 2021 20:35:03 UTC
 record: -1

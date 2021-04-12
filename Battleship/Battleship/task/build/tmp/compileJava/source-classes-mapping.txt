@@ -1,3 +1,4 @@
 battleship/Main.java
  battleship.Main
  battleship.Main$BattleshipMap
+ battleship.Main$BattleshipMap$shipType
