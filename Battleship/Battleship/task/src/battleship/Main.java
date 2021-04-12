@@ -6,34 +6,48 @@
 
 package battleship;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
 
     public static final Scanner scnr = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        BattleshipMap userMap = new BattleshipMap();
-        System.out.println(userMap);
+        System.out.println("Player 1, place your ships on the game field\n");
+        BattleshipMap user1Map = new BattleshipMap();
+        setUpShips(user1Map);
+        //preInitializeGameMap(user1Map);
 
-        setUpShips(userMap);
+        System.out.println("Press Enter and pass the move to another player\n...");
+        scnr.nextLine();
 
-        //preInitializeGameMap(userMap);
+        System.out.println("Player 2, place your ships on the game field\n");
+        BattleshipMap user2Map = new BattleshipMap();
+        setUpShips(user2Map);
+        //preInitializeGameMap2(user2Map);
 
-        System.out.println("The game starts!\n");
-        BattleshipMap opponentShootingMap = new BattleshipMap();
-        System.out.println(opponentShootingMap);
+        BattleshipMap user1ShootingMap = new BattleshipMap(); // Represents user 1's shots at user2Map
+        BattleshipMap user2ShootingMap = new BattleshipMap(); // Represents user 2's shots at user1Map
 
-        shootUntilGameEnds(userMap, opponentShootingMap);
+        int player = 1;
+
+        while (player != -1) {
+            if (player == 1) {
+                player = playerTurn(user1Map, user2Map, user1ShootingMap, 1);
+            } else {
+                player = playerTurn(user2Map, user1Map, user2ShootingMap, 2);
+            }
+        }
+
         System.out.println("\nYou sank the last ship. You won. Congratulations!");
+
     }
 
-    /**
-     * Loops through all 5 ships and takes user input to set location for each.
-     * @param inputMap the BattleshipMap object for the ships to be created and stored in
-     */
+    // Loops through all 5 ships and takes user input to set location for each
     private static void setUpShips(BattleshipMap inputMap) {
+        System.out.println(inputMap);
         String processStatus = "";
 
         // Ask for an input for each type of ship
@@ -53,15 +67,14 @@ public class Main {
 
     // Processes a single shot, looping if there was an error in the input
     // Ends once a valid shot is taken, returning the String message of the result (miss, hit, or ship sunk)
-    private static String processOneShot(BattleshipMap userMap, BattleshipMap opponentShootingMap) {
+    private static String processOneShot(BattleshipMap keyMap, BattleshipMap guessMap) {
         String shotResult = "";
 
         do {
             String userShot = scnr.nextLine();
-            shotResult = userMap.takeShot(userShot, opponentShootingMap);
+            shotResult = guessMap.takeShot(userShot, keyMap);
 
             if (shotResult.substring(0, 5).equals("Error")) {
-                System.out.println(userMap);
                 System.out.println("\n" + shotResult + " Try again:\n");
             }
         } while (shotResult.substring(0, 5).equals("Error"));
@@ -70,20 +83,27 @@ public class Main {
     }
 
     // Loops, asking for more shots until all battleships have been sunk
-    private static void shootUntilGameEnds(BattleshipMap userMap, BattleshipMap opponentShootingMap) {
-        System.out.println("Take a shot!\n");
-        do {
-            String shotResult = processOneShot(userMap, opponentShootingMap);
-            if (!userMap.isDefeated()) {
-                System.out.print(shotResult);
+    private static int playerTurn(BattleshipMap myMap, BattleshipMap theirMap, BattleshipMap myGuesses, int player) {
+        System.out.println("Press Enter and pass the move to another player\n...");
+        scnr.nextLine();
 
-                if (shotResult.equals("You sank a ship! Specify a new target:")) {
-                    System.out.println("\n");
-                } else {
-                    System.out.println(" Try again:\n");
-                }
-            }
-        } while (!userMap.isDefeated());
+        System.out.print(myGuesses);
+        System.out.println("---------------------");
+        System.out.println(myMap);
+
+        System.out.println("Player " + player + ", it's your turn:\n");
+        String shotResult = processOneShot(theirMap, myGuesses);
+        if (!theirMap.isDefeated()) {
+            System.out.println("\n" + shotResult);
+        } else {
+            return -1;
+        }
+
+        // Change the player
+        if (player == 1) {
+            return 2;
+        }
+        return 1;
     }
 
     // Pre-initialize game status (skipping manual input of ships)
@@ -93,6 +113,16 @@ public class Main {
         userMap.addShip(new String[]{"J10", "J8"}, BattleshipMap.shipType.SUBMARINE);
         userMap.addShip(new String[]{"B9", "D9"}, BattleshipMap.shipType.CRUISER);
         userMap.addShip(new String[]{"I2", "J2"}, BattleshipMap.shipType.DESTROYER);
+        System.out.println(userMap);
+    }
+
+    // 2nd version of pre-initialized map
+    private static void preInitializeGameMap2(BattleshipMap userMap) {
+        userMap.addShip(new String[]{"H2", "H6"}, BattleshipMap.shipType.AIRCRAFT_CARRIER);
+        userMap.addShip(new String[]{"F3", "F6"}, BattleshipMap.shipType.BATTLESHIP);
+        userMap.addShip(new String[]{"H8", "F8"}, BattleshipMap.shipType.SUBMARINE);
+        userMap.addShip(new String[]{"D4", "D6"}, BattleshipMap.shipType.CRUISER);
+        userMap.addShip(new String[]{"C8", "D8"}, BattleshipMap.shipType.DESTROYER);
         System.out.println(userMap);
     }
 
@@ -297,14 +327,13 @@ public class Main {
 
         /**
          * Takes a "shot" at the specified cell location. This updates the "hidden"
-         * map of the BattleshipMap object it is called on. The shot is represented
-         * to the shooter on the visible map (opponentShootingMap).
+         * map of the BattleshipMap object it is called on. Call this method on a guess map
          * @param cell the cell location of the "shot"
-         * @param opponentShootingMap visible map that will show shot location
+         * @param keyMap the map that shows true locations of ships
          * @return String denoting successful shot ("success") or an error message.
          */
-        public String takeShot(String cell, BattleshipMap opponentShootingMap) {
-            String cellBeingShot = map.get(cell);
+        public String takeShot(String cell, BattleshipMap keyMap) {
+            String cellBeingShot = keyMap.getMap().get(cell);
 
             if (cellBeingShot == null) {
                 return("Error! You entered the wrong coordinates!");
@@ -316,26 +345,24 @@ public class Main {
 
             if (cellBeingShot.equals("O")) {
                 map.put(cell, "X");
-                opponentShootingMap.getMap().put(cell, "X");
+                keyMap.getMap().put(cell, "X");
 
                 // Check if the ship is completely sunk
-                boolean isShipAlive = containsO(cell);
+                boolean isShipAlive = keyMap.containsO(cell);
                 // Revert the traverse
-                revertTraverse();
+                keyMap.revertTraverse();
 
-                System.out.println("\n" + opponentShootingMap);
                 if (!isShipAlive) {
-                    return("You sank a ship! Specify a new target:");
+                    return("You sank a ship!");
                 } else {
                     return("You hit a ship!");
                 }
             }
 
             map.put(cell, "M");
-            opponentShootingMap.getMap().put(cell, "M");
+            keyMap.getMap().put(cell, "M");
 
-            System.out.println("\n" + opponentShootingMap);
-            return("You missed.");
+            return("You missed!");
         }
 
         // Helper method to check cell bounds
@@ -458,5 +485,4 @@ public class Main {
             return displayedMap.toString();
         }
     }
-
 }
