@@ -5,8 +5,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scnr = new Scanner(System.in);
+
+        String operation = scnr.nextLine(); // "enc" or "dec"
+
         String message = scnr.nextLine();
         int key = Integer.parseInt(scnr.nextLine());
+
+        if (operation.equals("dec")) {
+            key = -1 * key;
+        }
+
         System.out.println(caesarEncrypt(message, key));
     }
 
@@ -21,13 +29,7 @@ public class Main {
 
         for (int i = 0; i < message.length(); i++) {
             char currentChar = message.charAt(i);
-
-            // Only encrypt letters, ignore spaces & punctuation
-            if (currentChar >= 97 && currentChar <= (97+26)) {
-                encryptedMessage.append(caesarShiftChar(currentChar, key));
-            } else {
-                encryptedMessage.append(currentChar);
-            }
+            encryptedMessage.append(caesarShiftChar(currentChar, key));
         }
 
         return encryptedMessage.toString();
@@ -35,21 +37,20 @@ public class Main {
 
     // Shifts an individual char letter by a positive/negative amount
     private static char caesarShiftChar(char letter, int amount) {
+        int shiftedLetter = 0;
+
         // For negative shifts
         if (amount < 0) {
             // Use Math.floorMod to make mod of negative number return
             // positive modulus and not negative remainder (Java default)
-            int shiftedLetter = letter + (Math.floorMod(amount, 26));
-            if (shiftedLetter > (int) ('z')) {
-                shiftedLetter -= 26;
-            }
-            return ((char)shiftedLetter);
+            shiftedLetter = letter + (Math.floorMod(amount, 143859));
+        } else {
+            // For positive shifts
+            shiftedLetter = letter + (amount % 143859);
         }
 
-        // For positive shifts
-        int shiftedLetter = letter + (amount % 26);
-        if (shiftedLetter > (int) ('z')) {
-            shiftedLetter -= 26;
+        if (shiftedLetter > 143859) {
+            shiftedLetter -= 143859;
         }
         return (char)shiftedLetter;
     }
