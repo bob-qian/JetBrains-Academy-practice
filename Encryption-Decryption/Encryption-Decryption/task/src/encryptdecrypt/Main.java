@@ -4,18 +4,26 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scnr = new Scanner(System.in);
+        String mode = "enc"; // Default to encryption
+        int key = 0; // Default to key 0
+        String data = ""; // Default to an empty string
 
-        String operation = scnr.nextLine(); // "enc" or "dec"
 
-        String message = scnr.nextLine();
-        int key = Integer.parseInt(scnr.nextLine());
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-mode")) {
+                mode = args[i + 1];
+            } else if (args[i].equals("-key")) {
+                key = Integer.parseInt(args[i + 1]);
+            } else if (args[i].equals("-data")) {
+                data = args[i + 1];
+            }
+        }
 
-        if (operation.equals("dec")) {
+        if (mode.equals("dec")) {
             key = -1 * key;
         }
 
-        System.out.println(caesarEncrypt(message, key));
+        System.out.println(caesarEncrypt(data, key));
     }
 
     /**
