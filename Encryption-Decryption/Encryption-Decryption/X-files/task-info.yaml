@@ -117,6 +117,18 @@ files:
         }
     }
   learner_created: false
+- name: src/encryptdecrypt/road_to_treasure.txt
+  visible: true
+  learner_created: true
+- name: src/encryptdecrypt/protected.txt
+  visible: true
+  learner_created: true
+- name: output.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/46/stages/249/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Wed, 14 Apr 2021 15:38:01 UTC
 record: -1

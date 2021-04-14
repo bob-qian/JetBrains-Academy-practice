@@ -1,5 +1,9 @@
 package encryptdecrypt;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Main {
@@ -7,15 +11,44 @@ public class Main {
         String mode = "enc"; // Default to encryption
         int key = 0; // Default to key 0
         String data = ""; // Default to an empty string
-
+        String dataInputFile = "none";
+        String outputFile = "none";
 
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-mode")) {
-                mode = args[i + 1];
-            } else if (args[i].equals("-key")) {
-                key = Integer.parseInt(args[i + 1]);
-            } else if (args[i].equals("-data")) {
-                data = args[i + 1];
+            switch (args[i]) {
+                case "-mode":
+                    mode = args[i + 1];
+                    break;
+
+                case "-key":
+                    key = Integer.parseInt(args[i + 1]);
+                    break;
+
+                case "-data":
+                    data = args[i + 1];
+                    break;
+
+                case "-in":
+                    if (!doesContain(args, "-data")) {
+                        // Read data from a file
+                        dataInputFile = args[i + 1];
+                    }
+                    break;
+
+                case "-out":
+                    outputFile = args[i + 1];
+            }
+        }
+
+        if (!dataInputFile.equals("none")) {
+            File readFile = new File(dataInputFile);
+
+            try (Scanner scnr = new Scanner(readFile)) {
+                while (scnr.hasNext()) {
+                    data = scnr.nextLine(); //TODO Currently only works on 1 line from file, not all
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("Error: no file \""+ dataInputFile + "\" found.");
             }
         }
 
@@ -23,7 +56,30 @@ public class Main {
             key = -1 * key;
         }
 
-        System.out.println(caesarEncrypt(data, key));
+        String encryptedMessage = caesarEncrypt(data, key);
+
+        if (outputFile.equals("none")) {
+            System.out.println(encryptedMessage);
+        } else {
+            File writeFile = new File(outputFile);
+
+            try (PrintWriter pw = new PrintWriter(writeFile)) {
+                pw.println(encryptedMessage);
+            } catch (IOException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+        System.out.println("Encryption complete.");
+    }
+
+    // Array contains
+    private static boolean doesContain(String[] list, String value) {
+        for (int i = 0; i < list.length; i++) {
+            if (list[i].equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

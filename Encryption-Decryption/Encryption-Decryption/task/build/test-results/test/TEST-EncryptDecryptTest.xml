@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="EncryptDecryptTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-14T14:51:22" hostname="DESKTOP-7TB4ARV" time="0.086">
+<testsuite name="EncryptDecryptTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-14T15:38:01" hostname="DESKTOP-7TB4ARV" time="0.12">
   <properties/>
-  <testcase name="start" classname="EncryptDecryptTest" time="0.086"/>
+  <testcase name="start" classname="EncryptDecryptTest" time="0.12"/>
   <system-out><![CDATA[?[1;31m
 Start test 1?[0m
-\jqhtrj%yt%m~ujwxpnqq&
+Encryption complete.
 ?[1;31m
 Start test 2?[0m
-Hello
+Encryption complete.
 ?[1;31m
 Start test 3?[0m
-123456789
+Encryption complete.
 ?[1;31m
 Start test 4?[0m
-Welcome to hyperskill!
+Encryption complete.
 ?[1;31m
 Start test 5?[0m
-Hi
+Encryption complete.
 ?[1;31m
 Start test 6?[0m
-111122223333
+Encryption complete.
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
