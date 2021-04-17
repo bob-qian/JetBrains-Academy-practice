@@ -13,6 +13,7 @@ public class Main {
         String data = ""; // Default to an empty string
         String dataInputFile = "none";
         String outputFile = "none";
+        String algorithm = "none";
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
@@ -37,6 +38,11 @@ public class Main {
 
                 case "-out":
                     outputFile = args[i + 1];
+                    break;
+
+                case "-alg":
+                    algorithm = args[i + 1];
+                    break;
             }
         }
 
@@ -56,7 +62,13 @@ public class Main {
             key = -1 * key;
         }
 
-        String encryptedMessage = caesarEncrypt(data, key);
+        String encryptedMessage = "";
+
+        if (algorithm.equals("shift")) {
+            encryptedMessage = letterShiftEncrypt(data, key);
+        } else if (algorithm.equals("unicode")) {
+            encryptedMessage = unicodeEncrypt(data, key);
+        }
 
         if (outputFile.equals("none")) {
             System.out.println(encryptedMessage);
@@ -65,11 +77,17 @@ public class Main {
 
             try (PrintWriter pw = new PrintWriter(writeFile)) {
                 pw.println(encryptedMessage);
+                System.out.println(encryptedMessage);
             } catch (IOException e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
-        System.out.println("Encryption complete.");
+
+        if (mode.equals("dec")) {
+            System.out.println("Decryption complete.");
+        } else {
+            System.out.println("Encryption complete.");
+        }
     }
 
     // Array contains
@@ -83,24 +101,24 @@ public class Main {
     }
 
     /**
-     * Encrypts message using a caesar shift cypher
+     * Encrypts message using a caesar shift cypher with all unicode characters
      * @param message
-     * @param key number of shifts to make for each letter (in either direction)
+     * @param key number of shifts to make for each character (in either direction)
      * @return encrypted String
      */
-    public static String caesarEncrypt(String message, int key) {
+    public static String unicodeEncrypt(String message, int key) {
         StringBuilder encryptedMessage = new StringBuilder();
 
         for (int i = 0; i < message.length(); i++) {
             char currentChar = message.charAt(i);
-            encryptedMessage.append(caesarShiftChar(currentChar, key));
+            encryptedMessage.append(unicodeShiftChar(currentChar, key));
         }
 
         return encryptedMessage.toString();
     }
 
     // Shifts an individual char letter by a positive/negative amount
-    private static char caesarShiftChar(char letter, int amount) {
+    private static char unicodeShiftChar(char letter, int amount) {
         int shiftedLetter = 0;
 
         // For negative shifts
@@ -115,6 +133,59 @@ public class Main {
 
         if (shiftedLetter > 143859) {
             shiftedLetter -= 143859;
+        }
+        return (char)shiftedLetter;
+    }
+
+
+    /**
+     * Encrypts message using a caesar shift cypher, only encrypts letters
+     * @param message
+     * @param key number of shifts to make for each letter (in either direction)
+     * @return encrypted String
+     */
+    public static String letterShiftEncrypt(String message, int key) {
+        StringBuilder encryptedMessage = new StringBuilder();
+
+        for (int i = 0; i < message.length(); i++) {
+            char currentChar = message.charAt(i);
+
+            // Only encrypt letters, ignore spaces & punctuation
+            if ((currentChar >= 'a' && currentChar <= 'z') ||
+                    (currentChar >= 'A' && currentChar <= 'Z')) {
+                encryptedMessage.append(letterShiftChar(currentChar, key));
+            } else {
+                encryptedMessage.append(currentChar);
+            }
+        }
+
+        return encryptedMessage.toString();
+    }
+
+    // Shifts an individual char letter by a positive/negative amount
+    public static char letterShiftChar(char letter, int amount) {
+        int upperBound = 0;
+        if (letter >= 'a' && letter <= 'z') {
+            upperBound = 'z';
+        } else {
+            upperBound = 'Z';
+        }
+
+        // For negative shifts
+        if (amount < 0) {
+            // Use Math.floorMod to make mod of negative number return
+            // positive modulus and not negative remainder (Java default)
+            int shiftedLetter = letter + (Math.floorMod(amount, 26));
+            if (shiftedLetter > (int) (upperBound)) {
+                shiftedLetter -= 26;
+            }
+            return ((char)shiftedLetter);
+        }
+
+        // For positive shifts
+        int shiftedLetter = letter + (amount % 26);
+        if (shiftedLetter > (int) (upperBound)) {
+            shiftedLetter -= 26;
         }
         return (char)shiftedLetter;
     }

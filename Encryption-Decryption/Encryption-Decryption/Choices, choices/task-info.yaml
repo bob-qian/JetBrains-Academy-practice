@@ -179,6 +179,29 @@ files:
 
     }
   learner_created: false
+- name: src/encryptdecrypt/protected.txt
+  visible: true
+  text: |
+    =5>%Mzsynslyts%Hnwhqj
+  learner_created: true
+- name: output.txt
+  visible: true
+  text: |
+    111122223333
+  learner_created: true
+- name: src/encryptdecrypt/road_to_treasure.txt
+  visible: true
+  text: 809 Huntington Circle
+  learner_created: true
+- name: src/encryptdecrypt/output.txt
+  visible: true
+  learner_created: true
+- name: src/encryptdecrypt/in.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/46/stages/250/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Sat, 17 Apr 2021 18:48:19 UTC
 record: -1
