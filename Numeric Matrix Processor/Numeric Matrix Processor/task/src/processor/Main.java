@@ -7,9 +7,9 @@ public class Main {
 
     public static void main(String[] args) {
         int[][] matrix1 = createMatrixFromInput();
-        int[][] matrix2 = createMatrixFromInput();
+        int constant1 = createConstantFromInput();
 
-        int[][] sum = addMatrix(matrix1, matrix2);
+        int[][] sum = multiplyMatrix(matrix1, constant1);
 
         if (sum == null) {
             System.out.println("ERROR");
@@ -18,6 +18,12 @@ public class Main {
         }
     }
 
+    /**
+     * Sums two m x n matrices
+     * @param matrix1 first matrix
+     * @param matrix2 second matrix
+     * @return m x n sum
+     */
     public static int[][] addMatrix(int[][] matrix1, int[][] matrix2) {
         int[][] outputMatrix = new int[matrix1.length][matrix1[0].length];
 
@@ -36,6 +42,31 @@ public class Main {
         }
 
         return outputMatrix;
+    }
+
+
+    /**
+     * Scale an m x n matrix by a constant
+     * @param matrix
+     * @param constant
+     * @return
+     */
+    public static int[][] multiplyMatrix(int[][] matrix, int constant) {
+        int[][] outputMatrix = new int[matrix.length][matrix[0].length];
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                outputMatrix[i][j] = matrix[i][j] * constant;
+            }
+        }
+
+        return outputMatrix;
+    }
+
+    // Creates an int constant from user input
+    private static int createConstantFromInput() {
+        String constant = scnr.nextLine();
+        return Integer.parseInt(constant);
     }
 
     // Creates a 2D array matrix from user input
