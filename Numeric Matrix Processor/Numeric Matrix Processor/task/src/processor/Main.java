@@ -6,16 +6,59 @@ public class Main {
     private static Scanner scnr = new Scanner(System.in);
 
     public static void main(String[] args) {
-        int[][] matrix1 = createMatrixFromInput();
-        int constant1 = createConstantFromInput();
+        menuAction();
+    }
 
-        int[][] sum = multiplyMatrix(matrix1, constant1);
+    // Displays menu and asks for user input
+    private static void menuAction() {
+        System.out.println("1. Add matrices");
+        System.out.println("2. Multiply matrix by a constant");
+        System.out.println("3. Multiply matrices");
+        System.out.println("0. Exit");
 
-        if (sum == null) {
-            System.out.println("ERROR");
-        } else {
-            System.out.println(displayMatrix(sum));
+        System.out.print("Your choice: ");
+        String selectedOperation = scnr.nextLine();
+
+        switch (selectedOperation) {
+            case "1":
+                addMatrixAction();
+                break;
+            case "2":
+                multiplyMatrixByConstantAction();
+                break;
+
+
         }
+    }
+
+    // Asks for user input and adds matrices
+    private static void addMatrixAction() {
+        System.out.print("Enter size of first matrix: ");
+        String[] dimensions1 = dimensionsFromInput();
+        System.out.println("Enter first matrix:");
+        double[][] matrix1 = createMatrixFromInput(dimensions1);
+
+        System.out.print("Enter size of second matrix: ");
+        String[] dimensions2 = dimensionsFromInput();
+        System.out.println("Enter second matrix:");
+        double[][] matrix2 = createMatrixFromInput(dimensions2);
+
+        System.out.println("The result is:");
+        System.out.println(displayMatrix(addMatrix(matrix1, matrix2)));
+    }
+
+    // Asks for user input and multiplies matrix by a constant
+    private static void multiplyMatrixByConstantAction() {
+        System.out.print("Enter size of matrix: ");
+        String[] dimensions = dimensionsFromInput();
+        System.out.println("Enter matrix:");
+        double[][] matrix = createMatrixFromInput(dimensions);
+
+        System.out.print("Enter constant: ");
+        double constant = createConstantFromInput();
+
+        System.out.println("The result is:");
+        System.out.println(displayMatrix(multiplyMatrix(matrix, constant)));
     }
 
     /**
@@ -24,8 +67,8 @@ public class Main {
      * @param matrix2 second matrix
      * @return m x n sum
      */
-    public static int[][] addMatrix(int[][] matrix1, int[][] matrix2) {
-        int[][] outputMatrix = new int[matrix1.length][matrix1[0].length];
+    public static double[][] addMatrix(double[][] matrix1, double[][] matrix2) {
+        double[][] outputMatrix = new double[matrix1.length][matrix1[0].length];
 
         if (matrix1.length != matrix2.length) {
             return null;
@@ -44,15 +87,46 @@ public class Main {
         return outputMatrix;
     }
 
+    /**
+     * Multiply a matrix by another matrix (overloaded method)
+     * @param matrix
+     * @param matrix2
+     * @return
+     */
+    public static double[][] multiplyMatrix(double[][] matrix, double[][] matrix2) {
+        if (matrix[0].length != matrix2.length) {
+            System.out.println("The operation cannot be performed.");
+            return null;
+        }
+
+        double[][] outputMatrix = new double[matrix.length][matrix2[0].length];
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix2[0].length; j++) {
+                double innerProduct = 0;
+
+                // For i = 0, j = 0:
+                // matrix[0][0] * matrix2[0][0] + matrix[0][1] * matrix2[1][0] + matrix[0][2] * matrix[2][0]
+
+                // This loop computes the inner product of row i of matrix with col j of matrix2
+                for (int k = 0; k < matrix[0].length; k++) {
+                    innerProduct += matrix[i][k] * matrix2[k][j];
+                }
+                outputMatrix[i][j] = innerProduct;
+            }
+        }
+
+        return outputMatrix;
+    }
 
     /**
-     * Scale an m x n matrix by a constant
+     * Scale an m x n matrix by a constant (overloaded method)
      * @param matrix
      * @param constant
      * @return
      */
-    public static int[][] multiplyMatrix(int[][] matrix, int constant) {
-        int[][] outputMatrix = new int[matrix.length][matrix[0].length];
+    public static double[][] multiplyMatrix(double[][] matrix, double constant) {
+        double[][] outputMatrix = new double[matrix.length][matrix[0].length];
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
@@ -63,23 +137,19 @@ public class Main {
         return outputMatrix;
     }
 
-    // Creates an int constant from user input
-    private static int createConstantFromInput() {
+    // Creates a double constant from user input
+    private static double createConstantFromInput() {
         String constant = scnr.nextLine();
-        return Integer.parseInt(constant);
+        return Double.parseDouble(constant);
     }
 
-    // Creates a 2D array matrix from user input
-    private static int[][] createMatrixFromInput() {
-        /*System.out.println("Enter matrix size:");*/
-        String[] dimensions = scnr.nextLine().split(" ");
-
+    // Creates a 2D array matrix using matrix dimensions (in the form of a String array)
+    private static double[][] createMatrixFromInput(String[] dimensions) {
         int numRows = Integer.parseInt(dimensions[0]);
         int numCols = Integer.parseInt(dimensions[1]);
 
-
         // Create a new 2D array of dimensions specified
-        int[][] matrix = new int[numRows][numCols];
+        double[][] matrix = new double[numRows][numCols];
 
         for (int i = 0; i < numRows; i++) {
             String[] row = scnr.nextLine().split(" ");
@@ -90,8 +160,14 @@ public class Main {
         return matrix;
     }
 
+    // Gets matrix dimensions from user input (in the form of a String array)
+    private static String[] dimensionsFromInput() {
+        String[] dimensions = scnr.nextLine().split(" ");
+        return dimensions;
+    }
+
     // Creates a string representation of a 2D array matrix
-    private static String displayMatrix(int[][] matrix) {
+    private static String displayMatrix(double[][] matrix) {
         StringBuilder output = new StringBuilder();
 
         for (int i = 0; i < matrix.length; i++) {
