@@ -6,11 +6,14 @@ public class Main {
     private static Scanner scnr = new Scanner(System.in);
 
     public static void main(String[] args) {
-        menuAction();
+        boolean continueProgram = menuAction();
+        while (continueProgram) {
+            continueProgram = menuAction();
+        }
     }
 
     // Displays menu and asks for user input
-    private static void menuAction() {
+    private static boolean menuAction() {
         System.out.println("1. Add matrices");
         System.out.println("2. Multiply matrix by a constant");
         System.out.println("3. Multiply matrices");
@@ -26,9 +29,13 @@ public class Main {
             case "2":
                 multiplyMatrixByConstantAction();
                 break;
-
-
+            case "3":
+                multiplyMatricesAction();
+                break;
+            case "0":
+                return false;
         }
+        return true;
     }
 
     // Asks for user input and adds matrices
@@ -43,8 +50,13 @@ public class Main {
         System.out.println("Enter second matrix:");
         double[][] matrix2 = createMatrixFromInput(dimensions2);
 
-        System.out.println("The result is:");
-        System.out.println(displayMatrix(addMatrix(matrix1, matrix2)));
+        double[][] result = addMatrix(matrix1, matrix2);
+        if (result == null) {
+            System.out.println("The operation cannot be performed.");
+        } else {
+            System.out.println("The result is:");
+            System.out.println(displayMatrix(result));
+        }
     }
 
     // Asks for user input and multiplies matrix by a constant
@@ -59,6 +71,27 @@ public class Main {
 
         System.out.println("The result is:");
         System.out.println(displayMatrix(multiplyMatrix(matrix, constant)));
+    }
+
+    // Asks for user input and multiplies 2 matrices
+    private static void multiplyMatricesAction() {
+        System.out.print("Enter size of first matrix: ");
+        String[] dimensions1 = dimensionsFromInput();
+        System.out.println("Enter first matrix:");
+        double[][] matrix1 = createMatrixFromInput(dimensions1);
+
+        System.out.print("Enter size of second matrix: ");
+        String[] dimensions2 = dimensionsFromInput();
+        System.out.println("Enter second matrix:");
+        double[][] matrix2 = createMatrixFromInput(dimensions2);
+
+        double[][] result = multiplyMatrix(matrix1, matrix2);
+        if (result == null) {
+            System.out.println("The operation cannot be performed.");
+        } else {
+            System.out.println("The result is:");
+            System.out.println(displayMatrix(result));
+        }
     }
 
     /**
@@ -95,7 +128,6 @@ public class Main {
      */
     public static double[][] multiplyMatrix(double[][] matrix, double[][] matrix2) {
         if (matrix[0].length != matrix2.length) {
-            System.out.println("The operation cannot be performed.");
             return null;
         }
 
@@ -154,7 +186,7 @@ public class Main {
         for (int i = 0; i < numRows; i++) {
             String[] row = scnr.nextLine().split(" ");
             for (int j = 0; j < row.length; j++) {
-                matrix[i][j] = Integer.parseInt(row[j]);
+                matrix[i][j] = Double.parseDouble(row[j]);
             }
         }
         return matrix;
@@ -172,7 +204,14 @@ public class Main {
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                output.append(matrix[i][j]);
+                double currentElement = matrix[i][j];
+                // Leave off trailing ".0" if double is a whole number
+                if (currentElement % 1 == 0) {
+                    output.append((int) currentElement);
+                } else {
+                    output.append(currentElement);
+                }
+
                 output.append(" ");
             }
             output.append("\n");
