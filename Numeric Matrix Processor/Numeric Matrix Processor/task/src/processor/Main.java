@@ -18,6 +18,7 @@ public class Main {
         System.out.println("2. Multiply matrix by a constant");
         System.out.println("3. Multiply matrices");
         System.out.println("4. Transpose matrix");
+        System.out.println("5. Calculate a determinant");
         System.out.println("0. Exit");
 
         System.out.print("Your choice: ");
@@ -35,6 +36,9 @@ public class Main {
                 break;
             case "4":
                 transposeMatrixAction();
+                break;
+            case "5":
+                determinantAction();
                 break;
             case "0":
                 return false;
@@ -131,6 +135,83 @@ public class Main {
         }
 
         System.out.println(displayMatrix(result));
+    }
+
+    // Asks for user input and finds determinant of matrix
+    private static void determinantAction() {
+        System.out.print("Enter matrix size: ");
+        String[] dimensions = dimensionsFromInput();
+        System.out.println("Enter matrix:");
+        double[][] matrix = createMatrixFromInput(dimensions);
+
+        double determinant = calculateDeterminant(matrix);
+
+        System.out.println("The result is:");
+        // Leave off trailing ".0" if double is a whole number
+        if (determinant % 1 == 0) {
+            System.out.println((int)determinant);
+        } else {
+            System.out.println(determinant);
+        }
+        System.out.println();
+    }
+
+    /**
+     * Finds determinant of an n x n matrix
+     * @param matrix
+     * @return
+     */
+    public static double calculateDeterminant(double[][] matrix) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        // Must be a square matrix
+        if (numRows != numCols) {
+            return -1;
+        }
+
+        // Base case 1: 1x1 matrix
+        if (numRows == 1) {
+            return matrix[0][0];
+        }
+
+        // Base case 2: 2x2 matrix
+        if (numRows == 2) {
+            return (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]);
+        }
+
+        double determinant = 0;
+        int sign = 1;
+
+        for (int i = 0; i < numRows; i++) {
+            double subDeterminant = calculateDeterminant(createSubMatrix(matrix, i, 0));
+            determinant += (sign * matrix[i][0]) * subDeterminant;
+            sign = sign * -1;
+        }
+        return determinant;
+    }
+
+    // Creates a sub-matrix from an input matrix that excludes a specified row and column
+    private static double[][] createSubMatrix(double[][] matrix, int excludeRow, int excludeCol) {
+        double[][] subMatrix = new double[matrix.length - 1][matrix[0].length - 1];
+
+
+        int subMatrixRow = 0;
+
+        for (int i = 0; i < matrix.length; i++) {
+            int subMatrixCol = 0;
+
+            if (i != excludeRow) {
+                for (int j = 0; j < matrix[0].length; j++) {
+                    if (j != excludeCol) {
+                        subMatrix[subMatrixRow][subMatrixCol] = matrix[i][j];
+                        subMatrixCol += 1;
+                    }
+                }
+                subMatrixRow += 1;
+            }
+        }
+        return subMatrix;
     }
 
     /**
