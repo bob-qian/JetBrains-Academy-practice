@@ -17,6 +17,7 @@ public class Main {
         System.out.println("1. Add matrices");
         System.out.println("2. Multiply matrix by a constant");
         System.out.println("3. Multiply matrices");
+        System.out.println("4. Transpose matrix");
         System.out.println("0. Exit");
 
         System.out.print("Your choice: ");
@@ -31,6 +32,9 @@ public class Main {
                 break;
             case "3":
                 multiplyMatricesAction();
+                break;
+            case "4":
+                transposeMatrixAction();
                 break;
             case "0":
                 return false;
@@ -94,8 +98,128 @@ public class Main {
         }
     }
 
+    // Asks for user input and performs specified matrix transposition
+    private static void transposeMatrixAction() {
+        System.out.println("\n1. Main diagonal");
+        System.out.println("2. Side diagonal");
+        System.out.println("3. Vertical line");
+        System.out.println("4. Horizontal line");
+
+        System.out.print("Your choice: ");
+        String transpositionType = scnr.nextLine();
+
+        System.out.print("Enter matrix size: ");
+        String[] dimensions = dimensionsFromInput();
+        System.out.println("Enter matrix:");
+        double[][] matrix = createMatrixFromInput(dimensions);
+
+        double[][] result = null;
+
+        switch (transpositionType) {
+            case "1":
+                result = transposeMatrixMainDiagonal(matrix);
+                break;
+            case "2":
+                result = transposeMatrixSideDiagonal(matrix);
+                break;
+            case "3":
+                result = transposeMatrixVertical(matrix);
+                break;
+            case "4":
+                result = transposeMatrixHorizontal(matrix);
+                break;
+        }
+
+        System.out.println(displayMatrix(result));
+    }
+
+    /**
+     * Transposes a matrix along its main diagonal
+     * @param matrix
+     * @return
+     */
+    public static double[][] transposeMatrixMainDiagonal(double[][] matrix) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        // Dimensions are flipped
+        double[][] outputMatrix = new double[numCols][numRows];
+
+        for (int i = 0; i < numCols; i++) {
+            for (int j = 0; j < numRows; j++) {
+                outputMatrix[i][j] = matrix[j][i];
+            }
+        }
+
+        return outputMatrix;
+    }
+
+    /**
+     * Transposes a matrix along the side diagonal
+     * @param matrix
+     * @return
+     */
+    public static double[][] transposeMatrixSideDiagonal(double[][] matrix) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        // Dimensions are flipped
+        double[][] outputMatrix = new double[numCols][numRows];
+
+        for (int i = 0; i < numCols; i++) {
+            for (int j = 0; j < numRows; j++) {
+                outputMatrix[i][j] = matrix[(numRows-1) - j][(numCols-1) - i];
+            }
+        }
+
+        return outputMatrix;
+    }
+
+    /**
+     * Transposes a matrix along a vertical line
+     * @param matrix
+     * @return
+     */
+    public static double[][] transposeMatrixVertical(double[][] matrix) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        // Dimensions remain the same
+        double[][] outputMatrix = new double[numRows][numCols];
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                outputMatrix[i][j] = matrix[i][(numCols-1) - j];
+            }
+        }
+
+        return outputMatrix;
+    }
+
+    /**
+     * Transposes a matrix along a horizontal line
+     * @param matrix
+     * @return
+     */
+    public static double[][] transposeMatrixHorizontal(double[][] matrix) {
+        int numRows = matrix.length;
+        int numCols = matrix[0].length;
+
+        // Dimensions remain the same
+        double[][] outputMatrix = new double[numRows][numCols];
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                outputMatrix[i][j] = matrix[(numRows-1) - i][j];
+            }
+        }
+
+        return outputMatrix;
+    }
+
     /**
      * Sums two m x n matrices
+     *
      * @param matrix1 first matrix
      * @param matrix2 second matrix
      * @return m x n sum
@@ -122,6 +246,7 @@ public class Main {
 
     /**
      * Multiply a matrix by another matrix (overloaded method)
+     *
      * @param matrix
      * @param matrix2
      * @return
@@ -153,6 +278,7 @@ public class Main {
 
     /**
      * Scale an m x n matrix by a constant (overloaded method)
+     *
      * @param matrix
      * @param constant
      * @return
