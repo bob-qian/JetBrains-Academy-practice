@@ -19,6 +19,7 @@ public class Main {
         System.out.println("3. Multiply matrices");
         System.out.println("4. Transpose matrix");
         System.out.println("5. Calculate a determinant");
+        System.out.println("6. Inverse matrix");
         System.out.println("0. Exit");
 
         System.out.print("Your choice: ");
@@ -39,6 +40,9 @@ public class Main {
                 break;
             case "5":
                 determinantAction();
+                break;
+            case "6":
+                inverseAction();
                 break;
             case "0":
                 return false;
@@ -154,6 +158,54 @@ public class Main {
             System.out.println(determinant);
         }
         System.out.println();
+    }
+
+    // Asks for user input and finds inverse of matrix
+    private static void inverseAction() {
+        System.out.print("Enter matrix size: ");
+        String[] dimensions = dimensionsFromInput();
+        System.out.println("Enter matrix:");
+        double[][] matrix = createMatrixFromInput(dimensions);
+
+        double[][] result = calculateInverse(matrix);
+
+        if (result == null) {
+            System.out.println("This matrix doesn't have an inverse.");
+        } else {
+            System.out.println("The result is:");
+            System.out.println(displayMatrix(result));
+        }
+    }
+
+    /**
+     * Finds inverse of an n x n matrix
+     * @param matrix
+     * @return
+     */
+    public static double[][] calculateInverse(double[][] matrix) {
+        double determinant = calculateDeterminant(matrix);
+        if (determinant == 0) {
+            return null;
+        }
+
+        return multiplyMatrix(calculateAdjugate(matrix), (1 / determinant));
+    }
+
+    // Returns the adjugate matrix of an n x n matrix
+    private static double[][] calculateAdjugate(double[][] matrix) {
+        return transposeMatrixMainDiagonal(calculateCofactor(matrix));
+    }
+
+    // Returns the cofactor matrix of an n x n matrix
+    private static double[][] calculateCofactor(double[][] matrix) {
+        double[][] outputMatrix = new double[matrix.length][matrix[0].length];
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                outputMatrix[i][j] = Math.pow(-1, i + j) * calculateDeterminant(createSubMatrix(matrix, i, j));
+            }
+        }
+        return outputMatrix;
     }
 
     /**
