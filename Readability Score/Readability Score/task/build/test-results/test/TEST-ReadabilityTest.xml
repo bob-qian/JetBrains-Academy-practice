@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ReadabilityTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-20T16:19:37" hostname="DESKTOP-7TB4ARV" time="0.113">
+<testsuite name="ReadabilityTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-20T20:52:58" hostname="DESKTOP-7TB4ARV" time="0.149">
   <properties/>
-  <testcase name="start" classname="ReadabilityTest" time="0.113"/>
+  <testcase name="start" classname="ReadabilityTest" time="0.149"/>
   <system-out><![CDATA[?[1;31m
 Start test 1?[0m
-> This text is simple to read! It has on average less than 10 words per sentence.
-EASY
+Words: 108
+Sentences: 6
+Characters: 580
+The score is: 12.86
+This text should be understood by 18-24-year-olds.
 ?[1;31m
 Start test 2?[0m
-> This text is hard to read. It contains a lot of sentences as well as a lot of words in each sentence
-HARD
+Words: 100
+Sentences: 10
+Characters: 476
+The score is: 5.98
+This text should be understood by 11-12-year-olds.
 ?[1;31m
 Start test 3?[0m
-> 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1. 1. 1.
-HARD
-?[1;31m
-Start test 4?[0m
-> 12, 12 13 14 14 14, 12 21 23 89! 75 12, 134 241 123, 123 123 123, 123 123 123? 123, 123 123 123 23 123 213 123 123 123.
-HARD
-?[1;31m
-Start test 5?[0m
-> 12, 12 13 14 14 14, 12 21 23 89! 75 12, 241 123, 123 123 123, 123 123 123? 123, 123 123 123 23 123 213 123 123 123.
-EASY
-?[1;31m
-Start test 6?[0m
-> Readability is the ease with which a reader can understand a written text. In natural language, the readability of text depends on its content and its presentation. Researchers have used various factors to measure readability. And that is it!
-EASY
+Words: 180
+Sentences: 13
+Characters: 982
+The score is: 11.18
+This text should be understood by 17-18-year-olds.
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

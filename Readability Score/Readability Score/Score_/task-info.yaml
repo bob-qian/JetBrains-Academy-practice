@@ -211,6 +211,15 @@ files:
         }
     }
   learner_created: false
+- name: src/readability/in.txt
+  visible: true
+  learner_created: true
+- name: src/readability/test.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/39/stages/207/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Tue, 20 Apr 2021 20:52:58 UTC
 record: -1
