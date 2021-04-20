@@ -1,5 +1,7 @@
 package readability;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -16,9 +18,30 @@ public class Main {
      * @return
      */
     public static String textDifficulty(String text) {
-        if (text.length() > 100) {
+        String[] words = text.split(" ");
+
+        String endOfSentenceRegex = ".*[.!?]";
+
+        double averageWordsPerSentence = 0;
+
+        int wordsInSentence = 0;
+        int totalSentences = 0;
+
+        for (int i = 0; i < words.length; i++) {
+            wordsInSentence += 1;
+            if (words[i].matches(endOfSentenceRegex) || i == words.length-1) {
+                averageWordsPerSentence += wordsInSentence;
+                totalSentences += 1;
+                wordsInSentence = 0;
+            }
+        }
+        averageWordsPerSentence = averageWordsPerSentence / totalSentences;
+
+
+        if (averageWordsPerSentence > 10) {
             return "HARD";
         }
         return "EASY";
+
     }
 }
