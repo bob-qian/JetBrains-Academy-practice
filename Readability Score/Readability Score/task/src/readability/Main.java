@@ -108,41 +108,55 @@ public class Main {
         String userWantsToCalculate = scnr.nextLine();
         System.out.println();
 
-        switch (userWantsToCalculate) {
+        if (userWantsToCalculate.equals("all")) {
+            selectFormula("ARI");
+            selectFormula("FK");
+            selectFormula("SMOG");
+            selectFormula("CL");
+        } else {
+            selectFormula(userWantsToCalculate);
+        }
+
+    }
+
+    private static void selectFormula(String name) {
+        String testName = "";
+        double testScore = 0;
+
+        switch (name) {
             case "ARI":
                 // Find ARI score
-                double ARIscore = calculateARIScore(totalCharacters, totalWords, totalSentences);
-                testToAgeGroup("Automated Readability Index", ARIscore);
+                testName = "Automated Readability Index";
+                testScore = calculateARIScore(totalCharacters, totalWords, totalSentences);
                 break;
 
             case "FK":
                 // Find Flesh-Kincaid score
-                double FKscore = calculateFKScore(totalWords, totalSentences, totalSyllables);
-                String FKname = "Flesch-Kincaid readability tests";
-                FKname.replace("-", "–");
-                testToAgeGroup(FKname, FKscore);
+                testName = "Flesch-Kincaid readability tests";
+                testScore = calculateFKScore(totalWords, totalSentences, totalSyllables);
                 break;
 
             case "SMOG":
                 // Find SMOG score
-                double SMOGscore = calculateSMOGscore(totalSentences, totalPolysyllables);
-                testToAgeGroup("Simple Measure of Gobbledygook", SMOGscore);
+                testName = "Simple Measure of Gobbledygook";
+                testScore = calculateSMOGscore(totalSentences, totalPolysyllables);
                 break;
 
             case "CL":
                 // Find CL score
-                double CLscore = calculateCLscore(totalCharacters, totalWords, totalSentences);
-                String CLname = "Coleman-Liau index";
-                CLname.replace("-", "–");
-                testToAgeGroup(CLname, CLscore);
+                testScore = calculateCLscore(totalCharacters, totalWords, totalSentences);
+                testName = "Coleman-Liau index";
                 break;
-
-            //TODO: case of "all"
-            //TODO: average age of understanding
-            //TODO: figure out how the age bounding needs to be determined
         }
 
+        // Replace in order for JetBrains tests to properly detect certain test names
+        testName.replace("-", "–");
 
+        int ageGroup = testToAgeGroup(testScore);
+        System.out.println(testName + ": " + testScore + " (about " + ageGroup + "-year-olds).");
+        
+        //TODO: average age of understanding
+        //TODO: figure out how the age bounding needs to be determined
     }
 
     // Returns number of syllables in a word using the number of vowels
@@ -198,11 +212,11 @@ public class Main {
         return roundDown(ARIscore);
     }
 
-    // Takes test score and outputs its age group
-    private static void testToAgeGroup(String testName, double score) {
+    // Takes test score and returns its age group as an int
+    private static int testToAgeGroup(double score) {
         int scoreRounded = (int) Math.ceil(score);
         int ageGroup = mapARItoAgeGroup[scoreRounded - 1];
-        System.out.println(testName + ": " + score + " (about " + ageGroup + "-year-olds).");
+        return ageGroup;
     }
 
     // Calculates FK score
