@@ -166,8 +166,6 @@ public class Main {
 
         // Update ageGroups array
         ageGroups.add(ageGroup);
-        //TODO: average age of understanding
-        //TODO: figure out how the age bounding needs to be determined
     }
 
     // Returns number of syllables in a word using the number of vowels
