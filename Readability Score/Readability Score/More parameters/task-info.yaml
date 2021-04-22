@@ -449,5 +449,8 @@ files:
     between success and failure
   learner_created: true
 feedback_link: https://hyperskill.org/projects/39/stages/208/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Thu, 22 Apr 2021 18:34:36 UTC
 record: -1

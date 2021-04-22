@@ -108,18 +108,27 @@ public class Main {
         String userWantsToCalculate = scnr.nextLine();
         System.out.println();
 
+        ArrayList<Integer> ageGroups = new ArrayList<>();
+
         if (userWantsToCalculate.equals("all")) {
-            selectFormula("ARI");
-            selectFormula("FK");
-            selectFormula("SMOG");
-            selectFormula("CL");
+            selectFormula("ARI", ageGroups);
+            selectFormula("FK", ageGroups);
+            selectFormula("SMOG", ageGroups);
+            selectFormula("CL", ageGroups);
         } else {
-            selectFormula(userWantsToCalculate);
+            selectFormula(userWantsToCalculate, ageGroups);
         }
 
+        double averageAgeGroup = 0;
+        for (Integer age : ageGroups) {
+            averageAgeGroup += age;
+        }
+        averageAgeGroup /= ageGroups.size();
+        System.out.println("\nThis text should be understood in average by " + averageAgeGroup +
+                "-year-olds.");
     }
 
-    private static void selectFormula(String name) {
+    private static void selectFormula(String name, ArrayList<Integer> ageGroups) {
         String testName = "";
         double testScore = 0;
 
@@ -154,7 +163,9 @@ public class Main {
 
         int ageGroup = testToAgeGroup(testScore);
         System.out.println(testName + ": " + testScore + " (about " + ageGroup + "-year-olds).");
-        
+
+        // Update ageGroups array
+        ageGroups.add(ageGroup);
         //TODO: average age of understanding
         //TODO: figure out how the age bounding needs to be determined
     }
@@ -214,7 +225,7 @@ public class Main {
 
     // Takes test score and returns its age group as an int
     private static int testToAgeGroup(double score) {
-        int scoreRounded = (int) Math.ceil(score);
+        int scoreRounded = (int) Math.floor(score);
         int ageGroup = mapARItoAgeGroup[scoreRounded - 1];
         return ageGroup;
     }

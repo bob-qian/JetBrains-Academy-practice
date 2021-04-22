@@ -1,28 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ReadabilityTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-20T20:52:58" hostname="DESKTOP-7TB4ARV" time="0.149">
+<testsuite name="ReadabilityTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-22T18:34:36" hostname="DESKTOP-7TB4ARV" time="0.187">
   <properties/>
-  <testcase name="start" classname="ReadabilityTest" time="0.149"/>
+  <testcase name="start" classname="ReadabilityTest" time="0.187"/>
   <system-out><![CDATA[?[1;31m
 Start test 1?[0m
 Words: 108
 Sentences: 6
 Characters: 580
-The score is: 12.86
-This text should be understood by 18-24-year-olds.
+Syllables: 196
+Polysyllables: 20
+Enter the score you want to calculate (ARI, FK, SMOG, CL, all): > all
+
+Automated Readability Index: 12.86 (about 18-year-olds).
+Flesch-Kincaid readability tests: 12.84 (about 18-year-olds).
+Simple Measure of Gobbledygook: 13.55 (about 24-year-olds).
+Coleman-Liau index: 14.13 (about 25-year-olds).
+
+This text should be understood in average by 21.25-year-olds.
 ?[1;31m
 Start test 2?[0m
-Words: 100
-Sentences: 10
-Characters: 476
-The score is: 5.98
-This text should be understood by 11-12-year-olds.
+Words: 137
+Sentences: 14
+Characters: 687
+Syllables: 210
+Polysyllables: 17
+Enter the score you want to calculate (ARI, FK, SMOG, CL, all): > all
+
+Automated Readability Index: 7.08 (about 13-year-olds).
+Flesch-Kincaid readability tests: 6.31 (about 12-year-olds).
+Simple Measure of Gobbledygook: 9.42 (about 16-year-olds).
+Coleman-Liau index: 10.66 (about 16-year-olds).
+
+This text should be understood in average by 14.25-year-olds.
 ?[1;31m
 Start test 3?[0m
 Words: 180
 Sentences: 13
 Characters: 982
-The score is: 11.18
-This text should be understood by 17-18-year-olds.
+Syllables: 318
+Polysyllables: 34
+Enter the score you want to calculate (ARI, FK, SMOG, CL, all): > all
+
+Automated Readability Index: 11.18 (about 17-year-olds).
+Flesch-Kincaid readability tests: 10.65 (about 16-year-olds).
+Simple Measure of Gobbledygook: 12.36 (about 18-year-olds).
+Coleman-Liau index: 14.14 (about 25-year-olds).
+
+This text should be understood in average by 19.0-year-olds.
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
