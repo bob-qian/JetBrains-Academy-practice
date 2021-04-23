@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Clue {
+    // you can store here any variables you need for test
 
     final String input;
     final String answer;
@@ -29,28 +30,48 @@ class Clue {
 
 public class ConverterTest extends StageTest<Clue> {
 
-    public static TestCase<Clue> iToTest(final int i, final boolean provideAnswer) {
-        final String octal = Integer.toString(i, 8);
-        final String octalLast = octal.substring(octal.length() - 1);
-        final String input = Integer.toString(i);
+    static {
+        org.hyperskill.hstest.testing.Settings.allowOutOfInput = true;
+    }
 
-        return new TestCase<Clue>()
-            .setAttach(new Clue(input, octalLast, provideAnswer))
-            .setInput(input);
+    static String prefix(final int base) {
+        if (base == 2) {
+            return "0b";
+        } else if (base == 8) {
+            return "0";
+        } else {
+            return "0x";
+        }
+    }
+
+    public static List<TestCase<Clue>> iToTest(final int i, final boolean provideAnswer) {
+        final List<TestCase<Clue>> tests = new ArrayList<>();
+
+        for (final int base : new int[]{16, 8, 2}) {
+            final String answer = prefix(base) + Integer.toString(i, base);
+            final String input = i + "\n" + base;
+
+            tests.add(new TestCase<Clue>()
+                .setAttach(new Clue(input, answer, provideAnswer))
+                .setInput(input)
+            );
+        }
+
+        return tests;
     }
 
     @Override
-    public List<TestCase<Clue>> generate() {
+    public List<TestCase<Clue>>  generate() {
         final List<TestCase<Clue>> tests = new ArrayList<>();
 
         /* Tests with a hint: */
-        for (int i = 0; i <= 10; ++i) {
-            tests.add(iToTest(i, true));
-        }
+        tests.addAll(iToTest(11, true));
+        tests.addAll(iToTest(8, true));
+        tests.addAll(iToTest(0, true));
 
         /* Tests without a hint: */
-        for (int i = 2340; i <= 2350; ++i) {
-            tests.add(iToTest(i, false));
+        for (int i = 101; i <= 104; ++i) {
+            tests.addAll(iToTest(i, true));
         }
 
         return tests;
