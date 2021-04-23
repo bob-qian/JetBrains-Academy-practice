@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ConverterTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-04-23T20:53:49" hostname="DESKTOP-7TB4ARV" time="0.069">
+  <properties/>
+  <testcase name="start" classname="ConverterTest" time="0.069"/>
+  <system-out><![CDATA[?[1;31m
+Start test 1?[0m
+10 = 0b1010
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
