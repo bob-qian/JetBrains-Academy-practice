@@ -1,7 +1,12 @@
 package converter;
 
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("10 = 0b1010");
+        Scanner scnr = new Scanner(System.in);
+
+        int userInput = Integer.parseInt(scnr.nextLine());
+        System.out.println(userInput % 8);
     }
 }
