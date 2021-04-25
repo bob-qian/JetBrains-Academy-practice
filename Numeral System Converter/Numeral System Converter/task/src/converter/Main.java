@@ -1,28 +1,39 @@
 package converter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
         Scanner scnr = new Scanner(System.in);
 
-        // Get 3 input values
-        //System.out.print("Source radix: ");
-        int sourceRadix = Integer.parseInt(scnr.nextLine());
+        try {
+            // Get 3 input values
+            //System.out.print("Source radix: ");
+            int sourceRadix = Integer.parseInt(scnr.nextLine());
+            if (sourceRadix > 36 || sourceRadix < 1) {
+                throw new Exception("Error: Source radix must be between 1-36!");
+            }
 
-        //System.out.print("Source number: ");
-        String sourceNumber = scnr.nextLine();
+            //System.out.print("Source number: ");
+            String sourceNumber = scnr.nextLine();
 
-        //System.out.print("Target radix: ");
-        int targetRadix = Integer.parseInt(scnr.nextLine());
+            //System.out.print("Target radix: ");
+            int targetRadix = Integer.parseInt(scnr.nextLine());
+            if (targetRadix > 36 || targetRadix < 1) {
+                throw new Exception("Error: Target radix must be between 1-36!");
+            }
 
-        double decimalSourceNumber = convertNumberStringToDecimal(sourceNumber, sourceRadix);
-        System.out.println(decimalSourceNumber);
-        System.out.println(convertDecimalNumberToRadixString(decimalSourceNumber, targetRadix));
+            double decimalSourceNumber = convertNumberStringToDecimal(sourceNumber, sourceRadix);
+
+            System.out.println(convertDecimalNumberToRadixString(decimalSourceNumber, targetRadix));
+        } catch (NumberFormatException e) {
+            System.out.println("Error: not a number.");
+        } catch (NoSuchElementException e) {
+            System.out.println("Error: source number not a number.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -156,35 +167,6 @@ public class Main {
         }
 
         return Integer.toString(origNumber, newRadix);
-        /*StringBuilder newNumber = new StringBuilder();
-
-        // Special case: base 1
-        if (newRadix == 1) {
-            for (int i = 0; i < origNumber; i++) {
-                newNumber.append(1);
-            }
-            return newNumber.toString();
-        }
-
-        // Array containing the new digits in reverse order
-        ArrayList<String> newNumberDigitsReversed = new ArrayList<>();
-
-        int quotient = origNumber;
-        do {
-            int remainder = quotient % newRadix;
-            newNumberDigitsReversed.add(convertNumberToLetter(remainder));
-
-            quotient = quotient / newRadix;
-        } while (!(quotient < newRadix));
-        // The last quotient is the first digit of the final number
-        newNumberDigitsReversed.add(convertNumberToLetter(quotient));
-
-        // Iterate reverse through the list of digits and append them in proper order
-        for (int i = newNumberDigitsReversed.size() - 1; i >= 0; i--) {
-            newNumber.append(newNumberDigitsReversed.get(i));
-        }
-
-        return newNumber.toString();*/
     }
 
     // Converts any decimal fraction to base -newRadix- representation IN STRING FORM
