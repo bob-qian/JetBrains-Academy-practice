@@ -157,5 +157,27 @@ files:
     }
   learner_created: false
 feedback_link: https://hyperskill.org/projects/41/stages/218/implement#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #1
+
+    Your answer is wrong.
+    This is a sample test so we give you a hint.
+    Input: 10
+    0.234
+    7
+    Your answer: 00.14315
+    Correct answer: 0.14315
+
+    Please find below the output of your program during this failed test.
+    Note that the &#39;&gt;&#39; character indicates the beginning of the input line.
+
+    ---
+
+    &gt; 10
+    &gt; 0.234
+    &gt; 7
+    00.14315
+  time: Sun, 25 Apr 2021 19:16:48 UTC
 record: -1
