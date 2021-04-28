@@ -1,17 +1,6 @@
 type: edu
 custom_name: stage1
 files:
-- name: src/tictactoe/Main.java
-  visible: true
-  text: |
-    package tictactoe;
-
-    public class Main {
-        public static void main(String[] args) {
-            // write your code here
-        }
-    }
-  learner_created: false
 - name: test/Grid.java
   visible: false
   text: |-
@@ -485,6 +474,17 @@ files:
             }
 
             return CheckResult.correct();
+        }
+    }
+  learner_created: false
+- name: src/tictactoeWithAI/Main.java
+  visible: true
+  text: |
+    package tictactoe;
+
+    public class Main {
+        public static void main(String[] args) {
+            // write your code here
         }
     }
   learner_created: false
