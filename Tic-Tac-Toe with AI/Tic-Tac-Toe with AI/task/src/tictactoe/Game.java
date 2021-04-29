@@ -230,8 +230,11 @@ public class Game {
         return winners;
     }
 
-    // Returns the number of Xs on the game board
-    private int countOfX() {
+    /**
+     * Finds the number of Xs on the game board
+     * @return int count
+     */
+    public int countOfX() {
         int total = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -243,8 +246,11 @@ public class Game {
         return total;
     }
 
-    // Returns the number of Os on the game board
-    private int countOfO() {
+    /**
+     * Finds the number of Os on the game board
+     * @return int count
+     */
+    public int countOfO() {
         int total = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
