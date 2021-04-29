@@ -488,6 +488,12 @@ files:
         }
     }
   learner_created: false
+- name: src/tictactoe/Game.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/81/stages/447/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Thu, 29 Apr 2021 23:16:12 UTC
 record: -1

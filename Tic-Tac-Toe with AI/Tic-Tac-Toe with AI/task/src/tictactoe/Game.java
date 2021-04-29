@@ -7,36 +7,6 @@ import java.util.Scanner;
 public class Game {
     private static Scanner scnr = new Scanner(System.in);
 
-    public static void main(String[] args) {
-
-        // Initialize new Tic-tac-toe game
-        Game tttGame = new Game();
-
-        // Set according to user input
-        /*System.out.print("Enter cells: ");
-        String userInput = scnr.nextLine();
-        tttGame.setGameBoard(userInput);*/
-
-        // Create empty game
-        tttGame.setGameBoard("_________");
-
-        System.out.println(tttGame);
-
-        String currentPlayer = "X";
-
-        while (tttGame.calculateGameState().equals("Game not finished")) {
-            tttGame.makeMove(currentPlayer);
-            tttGame.calculateGameState();
-            if (currentPlayer.equals("X")) {
-                currentPlayer = "O";
-            } else {
-                currentPlayer = "X";
-            }
-        }
-        System.out.println(tttGame.calculateGameState());
-
-    }
-
     private String[][] gameBoard;
 
     public Game() {
@@ -85,7 +55,7 @@ public class Game {
     }
 
     /**
-     * Takes input from player, makes a move; repeats until a valid input is given
+     * Takes input from player, makes a move; repeats until a valid input is given. Prints game board once successful
      * @param player "X" or "O"
      */
     public void makeMove(String player) {
