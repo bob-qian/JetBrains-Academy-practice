@@ -1,4 +1,4 @@
-package tictactoe;
+package tictactoeWithAI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,7 @@ public class Game {
 
     public Game() {
         gameBoard = new String[3][3];
+        setGameBoard("_________");
     }
 
     /**
@@ -107,7 +108,7 @@ public class Game {
 
     // Adds an appropriate tick at the row and column for the currentPlayer (either "X" or "O")
     // Returns success of the operation (true or false)
-    private boolean addCoordinates(int row, int column, String currentPlayer) {
+    protected boolean addCoordinates(int row, int column, String currentPlayer) {
         // If slot is empty
         if (gameBoard[row-1][column-1].equals("_") || gameBoard[row-1][column-1].equals(" ")) {
             gameBoard[row-1][column-1] = currentPlayer;
@@ -129,6 +130,7 @@ public class Game {
         }
 
         ArrayList<String> winner = this.hasThreeInARow();
+
         // Impossible if 3 Xs and 3 Os
         if (winner.size() > 1) {
             return "Impossible";
@@ -193,9 +195,9 @@ public class Game {
             }
         }
 
-        // Remove underscores if accidentally caught
-        while (winners.contains("_")) {
-            winners.remove("_");
+        // Remove spaces if accidentally caught
+        while (winners.contains(" ")) {
+            winners.remove(" ");
         }
         return winners;
     }

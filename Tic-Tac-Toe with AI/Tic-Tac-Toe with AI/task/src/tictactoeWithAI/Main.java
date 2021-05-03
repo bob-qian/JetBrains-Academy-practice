@@ -1,7 +1,5 @@
 package tictactoeWithAI;
 
-import tictactoe.Game;
-
 import java.util.Scanner;
 
 public class Main {
@@ -13,34 +11,41 @@ public class Main {
         Game tttGame = new Game();
 
         // Initialize pre-existing game according to user input
-        System.out.print("Enter cells: ");
+        /*System.out.print("Enter cells: ");
         String userInput = scnr.nextLine();
-        tttGame.setGameBoard(userInput);
+        tttGame.setGameBoard(userInput);*/
 
         System.out.println(tttGame);
 
-        String currentPlayer;
+        do {
+            tttGame.makeMove("X");
+            if (!tttGame.calculateGameState().equals("Game not finished")) {
+                break;
+            }
 
-        // If there are an equal number of Xs and Os, the player is X
-        if (tttGame.countOfX() == tttGame.countOfO()) {
-            currentPlayer = "X";
-        } else {
-            // If there is an extra X, the move should be made with O
-            currentPlayer = "O";
-        }
+            makeRandomMove(tttGame, "O");
+            if (!tttGame.calculateGameState().equals("Game not finished")) {
+                break;
+            }
+        } while (true);
 
-        tttGame.makeMove(currentPlayer);
+        // Output game result
         System.out.println(tttGame.calculateGameState());
 
-        /*while (tttGame.calculateGameState().equals("Game not finished")) {
-            tttGame.makeMove(currentPlayer);
-            tttGame.calculateGameState();
-            if (currentPlayer.equals("X")) {
-                currentPlayer = "O";
-            } else {
-                currentPlayer = "X";
-            }
-        }
-        System.out.println(tttGame.calculateGameState());*/
+    }
+
+    // Makes a random move for a player
+    private static void makeRandomMove(Game game, String player) {
+        System.out.println("Making move level \"easy\"");
+
+        boolean added = false;
+
+        do {
+            int randomRow = (int) (Math.random() * 3) + 1;
+            int randomCol = (int) (Math.random() * 3) + 1;
+            added = game.addCoordinates(randomRow, randomCol, player);
+        } while (!added);
+
+        System.out.println(game);
     }
 }
