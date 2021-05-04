@@ -1,10 +1,10 @@
-tictactoeWithAI/Game.java
- tictactoeWithAI.Game
 tictactoeWithAI/TTTPlayer.java
  tictactoeWithAI.TTTPlayer
-tictactoeWithAI/AI.java
- tictactoeWithAI.AI
-tictactoeWithAI/Human.java
- tictactoeWithAI.Human
 tictactoeWithAI/Main.java
  tictactoeWithAI.Main
+tictactoeWithAI/Human.java
+ tictactoeWithAI.Human
+tictactoeWithAI/Game.java
+ tictactoeWithAI.Game
+tictactoeWithAI/AI.java
+ tictactoeWithAI.AI

@@ -125,7 +125,7 @@ public class Game {
      */
     public String calculateGameState() {
         // Game state: "Impossible" if difference of Xs and Os is 2 or more
-        if (Math.abs(this.countOfX() - this.countOfO()) >= 2) {
+        if (Math.abs(this.countOf("X") - this.countOf("O")) >= 2) {
             return "Impossible";
         }
 
@@ -203,30 +203,15 @@ public class Game {
     }
 
     /**
-     * Finds the number of Xs on the game board
+     * Finds the number of the specified symbol on the game board
+     * @param symbol ie "X" or "O"
      * @return int count
      */
-    public int countOfX() {
+    public int countOf(String symbol) {
         int total = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (gameBoard[i][j].equals("X")) {
-                    total += 1;
-                }
-            }
-        }
-        return total;
-    }
-
-    /**
-     * Finds the number of Os on the game board
-     * @return int count
-     */
-    public int countOfO() {
-        int total = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (gameBoard[i][j].equals("O")) {
+                if (gameBoard[i][j].equals(symbol)) {
                     total += 1;
                 }
             }
@@ -236,10 +221,108 @@ public class Game {
 
     // Checks if the game board still has empty cells
     private boolean hasEmptyCells() {
-        if ((this.countOfX() + this.countOfO()) == 9) {
+        if ((this.countOf("X") + this.countOf("O")) == 9) {
             return false;
         }
         return true;
     }
+
+    // Manually checks all possible columns/rows to see if there are 2 in a row
+    // If there are, returns a list of all possible [row, col] ways to win
+    // Else returns null
+    protected ArrayList<Integer[]> findWinningMoves(String symbol) {
+        ArrayList<Integer[]> allWinningMoves = new ArrayList<>();
+
+        String centerPiece = gameBoard[1][1];
+        if (centerPiece.equals(symbol)) {
+            // Middle row check
+            if (gameBoard[1][0].equals(centerPiece)) {
+                allWinningMoves.add(new Integer[] {1,2});
+            } else if (gameBoard[1][2].equals(centerPiece)) {
+                allWinningMoves.add(new Integer[] {1,0});
+            }
+
+            // Middle column check
+            if (gameBoard[0][1].equals(centerPiece)) {
+                allWinningMoves.add(new Integer[] {2,1});
+            } else if (gameBoard[2][1].equals(centerPiece)) {
+                allWinningMoves.add(new Integer[] {0,1});
+            }
+
+            // Diagonal check
+            if (gameBoard[0][0].equals(centerPiece)) {
+                allWinningMoves.add(new Integer[] {2,2});
+            } else if (gameBoard[2][2].equals(centerPiece)) {
+                allWinningMoves.add(new Integer[] {0,0});
+            }
+
+            // Anti-diagonal check
+            if (gameBoard[0][2].equals(centerPiece)) {
+                allWinningMoves.add(new Integer[] {2,0});
+            } else if (gameBoard[2][0].equals(centerPiece)) {
+                allWinningMoves.add(new Integer[] {0,2});
+            }
+        }
+        if (centerPiece.equals(" ")) {
+            // Middle row check
+            if (gameBoard[1][0].equals(symbol) && gameBoard[1][2].equals(symbol)) {
+                allWinningMoves.add(new Integer[] {1,1});
+            }
+            // Middle column check
+            if (gameBoard[0][1].equals(symbol) && gameBoard[2][1].equals(symbol)) {
+                allWinningMoves.add(new Integer[] {1,1});
+            }
+            // Diagonal check
+            if (gameBoard[0][0].equals(symbol) && gameBoard[2][2].equals(symbol)) {
+                allWinningMoves.add(new Integer[] {1,1});
+            }
+            // Anti-diagonal check
+            if (gameBoard[0][2].equals(symbol) && gameBoard[2][0].equals(symbol)) {
+                allWinningMoves.add(new Integer[] {1,1});
+            }
+        }
+
+        // Top and bottom row check
+        String midRow;
+        for (int i = 0; i < 3; i+=2) {
+            midRow = gameBoard[i][1];
+
+            if (midRow.equals(symbol)) {
+                if (gameBoard[i][0].equals(midRow)) {
+                    allWinningMoves.add(new Integer[] {i,2});
+                } else if (gameBoard[i][2].equals(midRow)) {
+                    allWinningMoves.add(new Integer[] {i,0});
+                }
+            }
+            if (midRow.equals(" ")) {
+                if (gameBoard[i][0].equals(symbol) && gameBoard[i][2].equals(symbol)) {
+                    allWinningMoves.add(new Integer[] {i,1});
+                }
+            }
+        }
+
+        // Left and right columns check
+        String midColumn;
+        for (int i = 0; i < 3; i+=2) {
+            midColumn = gameBoard[1][i];
+
+            if (midColumn.equals(symbol)) {
+                if (gameBoard[0][i].equals(midColumn)) {
+                    allWinningMoves.add(new Integer[] {2,i});
+                } else if (gameBoard[2][i].equals(midColumn)) {
+                    allWinningMoves.add(new Integer[] {0,i});
+                }
+            }
+
+            if (midColumn.equals(" ")) {
+                if (gameBoard[0][i].equals(symbol) && gameBoard[2][i].equals(symbol)) {
+                    allWinningMoves.add(new Integer[] {1,i});
+                }
+            }
+        }
+
+        return allWinningMoves;
+    }
+
 
 }

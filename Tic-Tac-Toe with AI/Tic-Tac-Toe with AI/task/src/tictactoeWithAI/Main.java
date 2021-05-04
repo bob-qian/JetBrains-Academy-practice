@@ -1,6 +1,7 @@
 package tictactoeWithAI;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Main {
@@ -55,6 +56,11 @@ public class Main {
     private static String[] validateUserCommand() {
         String userInput = scnr.nextLine();
         String[] userParameters = userInput.split(" ");
+        HashSet<String> validParameters = new HashSet<>();
+        validParameters.add("user");
+        validParameters.add("easy");
+        validParameters.add("medium");
+        validParameters.add("hard");
 
         // If command is to exit, just return the single element
         if (userParameters[0].equals("exit")) {
@@ -71,11 +77,11 @@ public class Main {
             return null;
         }
 
-        if (!(userParameters[1].equals("user") || userParameters[1].equals("easy"))) {
+        if (!(validParameters.contains(userParameters[1]))) {
             return null;
         }
 
-        if (!(userParameters[2].equals("user") || userParameters[2].equals("easy"))) {
+        if (!(validParameters.contains(userParameters[2]))) {
             return null;
         }
 
