@@ -1,17 +1,6 @@
 type: edu
 custom_name: stage5
 files:
-- name: src/tictactoe/Main.java
-  visible: true
-  text: |
-    package tictactoe;
-
-    public class Main {
-        public static void main(String[] args) {
-            // write your code here
-        }
-    }
-  learner_created: false
 - name: test/Grid.java
   visible: false
   text: |-
@@ -760,6 +749,583 @@ files:
         }
     }
   learner_created: false
+- name: src/tictactoeWithAI/AI.java
+  visible: true
+  text: |
+    package tictactoeWithAI;
+
+    import java.util.ArrayList;
+    import java.util.Arrays;
+
+    public class AI implements TTTPlayer {
+        String symbol; // X or O
+        String difficulty; // easy, medium, hard
+
+        public AI(String symbol, String difficulty) {
+            this.symbol = symbol;
+            this.difficulty = difficulty;
+        }
+
+        /**
+         * Makes an AI move
+         * @param game a tic-tac-toe game
+         */
+        public void makeMove(Game game) {
+            System.out.println("Making move level \"" + this.difficulty + "\"");
+            if (this.difficulty.equals("easy")) {
+                makeMoveEasy(game);
+            } else if (this.difficulty.equals("medium")) {
+                makeMoveMedium(game);
+            }
+            System.out.println(game);
+        }
+
+        // Makes an "easy" move (randomly generated move)
+        private void makeMoveEasy(Game game) {
+            boolean added = false;
+
+            do {
+                int randomRow = (int) (Math.random() * 3) + 1;
+                int randomCol = (int) (Math.random() * 3) + 1;
+                added = game.addCoordinates(randomRow, randomCol, this.symbol);
+            } while (!added);
+        }
+
+        // Makes a "medium" move according to logic
+        private void makeMoveMedium(Game game) {
+            // If it already has 2 in a row and can win with one further move, it does so
+            ArrayList<Integer[]> winningMoves = game.findWinningMoves(this.symbol);
+            if (winningMoves != null) {
+                for (Integer[] coordinates : winningMoves) {
+                    boolean added = game.addCoordinates(coordinates[0] + 1,
+                            coordinates[1] + 1, this.symbol);
+
+                    if (added) {
+                        return;
+                    }
+                }
+            }
+
+            // Else if its opponent can win with one move, it plays the move necessary to block
+            String opponentSymbol;
+            if (this.symbol.equals("X")) {
+                opponentSymbol = "O";
+            } else {
+                opponentSymbol = "X";
+            }
+
+            ArrayList<Integer[]> opponentWinningMoves = game.findWinningMoves(opponentSymbol);
+            if (opponentWinningMoves != null) {
+                for (Integer[] coordinates : opponentWinningMoves) {
+                    boolean added = game.addCoordinates(coordinates[0] + 1,
+                            coordinates[1] + 1, this.symbol);
+
+                    if (added) {
+                        return;
+                    }
+                }
+            }
+
+            // Otherwise, it makes a random move
+            makeMoveEasy(game);
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+    }
+  learner_created: true
+- name: src/tictactoeWithAI/Main.java
+  visible: true
+  text: |
+    package tictactoeWithAI;
+
+    import java.util.Arrays;
+    import java.util.HashSet;
+    import java.util.Scanner;
+
+    public class Main {
+        private static Scanner scnr = new Scanner(System.in);
+
+        public static void main(String[] args) {
+            do {
+                String[] userParameters = takeUserCommand();
+                if (userParameters[0].equals("exit")) {
+                    break;
+                }
+                TTTPlayer[] players = initializePlayers(userParameters);
+                playOneGame(players[0], players[1]);
+            } while (true);
+        }
+
+        // Create two tic-tac-toe players according to the user input, return them in an array
+        private static TTTPlayer[] initializePlayers(String[] userParameters) {
+            TTTPlayer[] players = new TTTPlayer[2];
+
+            if (userParameters[1].equals("user")) {
+                players[0] = new Human("X");
+            } else {
+                players[0] = new AI("X", userParameters[1]);
+            }
+
+            if (userParameters[2].equals("user")) {
+                players[1] = new Human("O");
+            } else {
+                players[1] = new AI("O", userParameters[2]);
+            }
+
+            return players;
+        }
+
+        // Loops until valid user parameters entered, returned as a string array
+        private static String[] takeUserCommand() {
+            String[] userParameters;
+
+            do {
+                System.out.print("Input command: ");
+                userParameters = validateUserCommand();
+                if (userParameters == null) {
+                    System.out.println("Bad parameters!");
+                }
+            } while (userParameters == null);
+
+            return userParameters;
+        }
+
+        // Checks user input string array to make sure all parameters are valid
+        private static String[] validateUserCommand() {
+            String userInput = scnr.nextLine();
+            String[] userParameters = userInput.split(" ");
+            HashSet<String> validParameters = new HashSet<>();
+            validParameters.add("user");
+            validParameters.add("easy");
+            validParameters.add("medium");
+            validParameters.add("hard");
+
+            // If command is to exit, just return the single element
+            if (userParameters[0].equals("exit")) {
+                return userParameters;
+            }
+
+            // Else do the rest of the validation checking
+            if (!(userParameters[0].equals("start"))) {
+                return null;
+            }
+
+            // Must be 3 parameters total
+            if (userParameters.length != 3) {
+                return null;
+            }
+
+            if (!(validParameters.contains(userParameters[1]))) {
+                return null;
+            }
+
+            if (!(validParameters.contains(userParameters[2]))) {
+                return null;
+            }
+
+            return userParameters;
+        }
+
+        private static void playOneGame(TTTPlayer player1, TTTPlayer player2) {
+            // Initialize new tic-tac-toe game
+            Game tttGame = new Game();
+            System.out.println(tttGame);
+
+            do {
+                player1.makeMove(tttGame);
+                if (!tttGame.calculateGameState().equals("Game not finished")) {
+                    break;
+                }
+
+                player2.makeMove(tttGame);
+                if (!tttGame.calculateGameState().equals("Game not finished")) {
+                    break;
+                }
+            } while (true);
+
+            // Output game result
+            System.out.println(tttGame.calculateGameState());
+        }
+    }
+  learner_created: true
+- name: src/tictactoeWithAI/Human.java
+  visible: true
+  text: |
+    package tictactoeWithAI;
+
+    public class Human implements TTTPlayer {
+        String symbol; // X or O
+
+        public Human(String symbol) {
+            this.symbol = symbol;
+        }
+
+        /**
+         * Takes user input to make a human move
+         * @param game a tic-tac-toe game
+         */
+        public void makeMove(Game game) {
+            game.makeMove(this.symbol);
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+    }
+  learner_created: true
+- name: src/tictactoeWithAI/TTTPlayer.java
+  visible: true
+  text: |
+    package tictactoeWithAI;
+
+    public interface TTTPlayer {
+        // Tic-tac-toe player must be able to make a move
+        public void makeMove(Game game);
+
+        // Tic-tac-toe player must have a retrievable symbol ("X" or "O")
+        public String getSymbol();
+    }
+  learner_created: true
+- name: src/tictactoeWithAI/Game.java
+  visible: true
+  text: |
+    package tictactoeWithAI;
+
+    import java.util.ArrayList;
+    import java.util.Arrays;
+    import java.util.Scanner;
+
+    public class Game {
+        private static Scanner scnr = new Scanner(System.in);
+
+        private String[][] gameBoard;
+
+        public Game() {
+            gameBoard = new String[3][3];
+            setGameBoard("_________");
+        }
+
+        /**
+         * Displays the tic-tac-toe game board
+         * @return String output
+         */
+        @Override
+        public String toString() {
+            StringBuilder gameBoardDisplay = new StringBuilder();
+            gameBoardDisplay.append("---------\n");
+            for (int i = 0; i < 3; i++) {
+                gameBoardDisplay.append("| " + gameBoard[i][0] + " " + gameBoard[i][1] +
+                        " " + gameBoard[i][2] + " |\n");
+            }
+            gameBoardDisplay.append("---------");
+            return gameBoardDisplay.toString();
+        }
+
+        /**
+         * Initializes the tic-tac-toe game board according to a 9-character input string
+         * @param input a 9-character input string where each character represents a cell
+         */
+        public void setGameBoard(String input) {
+            char[] inputLetters = input.toCharArray();
+            for (int i = 0; i < inputLetters.length; i++) {
+                String cellContent;
+
+                if (inputLetters[i] == '_') {
+                    cellContent = " ";
+                } else {
+                    cellContent = Character.toString(inputLetters[i]);
+                }
+
+                if (i < 3) {
+                    gameBoard[0][i] = cellContent;
+                } else if (i < 6) {
+                    gameBoard[1][i-3] = cellContent;
+                } else {
+                    gameBoard[2][i-6] = cellContent;
+                }
+            }
+        }
+
+        /**
+         * Takes input from player, makes a move; repeats until a valid input is given. Prints game board once successful
+         * @param player "X" or "O"
+         */
+        public void makeMove(String player) {
+            boolean inputSuccessful = false;
+
+            do {
+                int[] coordinates = getCoordinateInput();
+
+                if (coordinates != null) {
+                    // Add coordinates
+                    boolean coordinatesAdded = this
+                            .addCoordinates(coordinates[0], coordinates[1], player);
+                    if (coordinatesAdded) {
+                        System.out.println(this);
+                        inputSuccessful = true;
+                    } else {
+                        System.out.println("This cell is occupied! Choose another one!");
+                    }
+                }
+            } while (!inputSuccessful);
+        }
+
+        // Asks user for coordinates, returns an int array of the x and y coordinates
+        private static int[] getCoordinateInput() {
+            System.out.print("Enter the coordinates: ");
+            String coordinates = scnr.nextLine();
+            String[] splitCoordinates = coordinates.split(" ");
+
+            int[] intCoordinates = new int[2];
+
+            // Check to make sure they can be converted into numbers
+            try {
+                intCoordinates[0] = Integer.parseInt(splitCoordinates[0]);
+                intCoordinates[1] = Integer.parseInt(splitCoordinates[1]);
+            } catch (NumberFormatException e) {
+                System.out.println("You should enter numbers!");
+                return null;
+            }
+
+            // Validate coordinates
+            if ((intCoordinates[0] > 3 || intCoordinates[0] < 1)
+                    || (intCoordinates[1] > 3 || intCoordinates[1] < 1)) {
+                System.out.println("Coordinates should be from 1 to 3!");
+                return null;
+            }
+
+            return intCoordinates;
+        }
+
+        // Adds an appropriate tick at the row and column for the currentPlayer (either "X" or "O")
+        // Returns success of the operation (true or false)
+        protected boolean addCoordinates(int row, int column, String currentPlayer) {
+            // If slot is empty
+            if (gameBoard[row-1][column-1].equals("_") || gameBoard[row-1][column-1].equals(" ")) {
+                gameBoard[row-1][column-1] = currentPlayer;
+                return true;
+            }
+
+            // Else cell is occupied
+            return false;
+        }
+
+        /**
+         * Calculates the game state of the tic-tac-toe game, returns the game state as a string
+         * @return game state as a string message
+         */
+        public String calculateGameState() {
+            // Game state: "Impossible" if difference of Xs and Os is 2 or more
+            if (Math.abs(this.countOf("X") - this.countOf("O")) >= 2) {
+                return "Impossible";
+            }
+
+            ArrayList<String> winner = this.hasThreeInARow();
+
+            // Impossible if 3 Xs and 3 Os
+            if (winner.size() > 1) {
+                return "Impossible";
+            } else if (winner.size() != 0 && winner.get(0).equals("X")) {
+                // X wins if 3 Xs in a row
+                return "X wins";
+            } else if (winner.size() != 0 && winner.get(0).equals("O")) {
+                // O wins if 3 Os in a row
+                return "O wins";
+            }
+
+            if (this.hasEmptyCells()) {
+                return "Game not finished";
+            }
+
+            return "Draw";
+        }
+
+        // Manually checks all possible columns/rows to see if there is a winner
+        private ArrayList<String> hasThreeInARow() {
+            ArrayList<String> winners = new ArrayList<>();
+            String centerPiece = gameBoard[1][1];
+
+            // Middle row check
+            if (gameBoard[1][0].equals(centerPiece) && gameBoard[1][2].equals(centerPiece)) {
+                winners.add(centerPiece);
+                //System.out.println("1");
+            }
+            // Middle column check
+            if (gameBoard[0][1].equals(centerPiece) && gameBoard[2][1].equals(centerPiece)) {
+                winners.add(centerPiece);
+                //System.out.println("2");
+            }
+            // Diagonal check
+            if (gameBoard[0][0].equals(centerPiece) && gameBoard[2][2].equals(centerPiece)) {
+                winners.add(centerPiece);
+                //System.out.println("3");
+            }
+            // Anti-diagonal check
+            if (gameBoard[0][2].equals(centerPiece) && gameBoard[2][0].equals(centerPiece)) {
+                winners.add(centerPiece);
+                //System.out.println("4");
+            }
+
+            // Top and bottom row check
+            String midRow;
+            for (int i = 0; i < 3; i+=2) {
+                midRow = gameBoard[i][1];
+                if (gameBoard[i][0].equals(midRow) && gameBoard[i][2].equals(midRow)) {
+                    winners.add(midRow);
+                    //System.out.println("5");
+                }
+            }
+
+            // Left and right columns check
+            String midColumn;
+            for (int i = 0; i < 3; i+=2) {
+                midColumn = gameBoard[1][i];
+                if (gameBoard[0][i].equals(midColumn) && gameBoard[2][i].equals(midColumn)) {
+                    winners.add(midColumn);
+                    //System.out.println("6");
+                }
+            }
+
+            // Remove spaces if accidentally caught
+            while (winners.contains(" ")) {
+                winners.remove(" ");
+            }
+            return winners;
+        }
+
+        /**
+         * Finds the number of the specified symbol on the game board
+         * @param symbol ie "X" or "O"
+         * @return int count
+         */
+        public int countOf(String symbol) {
+            int total = 0;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (gameBoard[i][j].equals(symbol)) {
+                        total += 1;
+                    }
+                }
+            }
+            return total;
+        }
+
+        // Checks if the game board still has empty cells
+        private boolean hasEmptyCells() {
+            if ((this.countOf("X") + this.countOf("O")) == 9) {
+                return false;
+            }
+            return true;
+        }
+
+        // Manually checks all possible columns/rows to see if there are 2 in a row
+        // If there are, returns a list of all possible [row, col] ways to win
+        // Else returns null
+        protected ArrayList<Integer[]> findWinningMoves(String symbol) {
+            ArrayList<Integer[]> allWinningMoves = new ArrayList<>();
+
+            String centerPiece = gameBoard[1][1];
+            if (centerPiece.equals(symbol)) {
+                // Middle row check
+                if (gameBoard[1][0].equals(centerPiece)) {
+                    allWinningMoves.add(new Integer[] {1,2});
+                } else if (gameBoard[1][2].equals(centerPiece)) {
+                    allWinningMoves.add(new Integer[] {1,0});
+                }
+
+                // Middle column check
+                if (gameBoard[0][1].equals(centerPiece)) {
+                    allWinningMoves.add(new Integer[] {2,1});
+                } else if (gameBoard[2][1].equals(centerPiece)) {
+                    allWinningMoves.add(new Integer[] {0,1});
+                }
+
+                // Diagonal check
+                if (gameBoard[0][0].equals(centerPiece)) {
+                    allWinningMoves.add(new Integer[] {2,2});
+                } else if (gameBoard[2][2].equals(centerPiece)) {
+                    allWinningMoves.add(new Integer[] {0,0});
+                }
+
+                // Anti-diagonal check
+                if (gameBoard[0][2].equals(centerPiece)) {
+                    allWinningMoves.add(new Integer[] {2,0});
+                } else if (gameBoard[2][0].equals(centerPiece)) {
+                    allWinningMoves.add(new Integer[] {0,2});
+                }
+            }
+            if (centerPiece.equals(" ")) {
+                // Middle row check
+                if (gameBoard[1][0].equals(symbol) && gameBoard[1][2].equals(symbol)) {
+                    allWinningMoves.add(new Integer[] {1,1});
+                }
+                // Middle column check
+                if (gameBoard[0][1].equals(symbol) && gameBoard[2][1].equals(symbol)) {
+                    allWinningMoves.add(new Integer[] {1,1});
+                }
+                // Diagonal check
+                if (gameBoard[0][0].equals(symbol) && gameBoard[2][2].equals(symbol)) {
+                    allWinningMoves.add(new Integer[] {1,1});
+                }
+                // Anti-diagonal check
+                if (gameBoard[0][2].equals(symbol) && gameBoard[2][0].equals(symbol)) {
+                    allWinningMoves.add(new Integer[] {1,1});
+                }
+            }
+
+            // Top and bottom row check
+            String midRow;
+            for (int i = 0; i < 3; i+=2) {
+                midRow = gameBoard[i][1];
+
+                if (midRow.equals(symbol)) {
+                    if (gameBoard[i][0].equals(midRow)) {
+                        allWinningMoves.add(new Integer[] {i,2});
+                    } else if (gameBoard[i][2].equals(midRow)) {
+                        allWinningMoves.add(new Integer[] {i,0});
+                    }
+                }
+                if (midRow.equals(" ")) {
+                    if (gameBoard[i][0].equals(symbol) && gameBoard[i][2].equals(symbol)) {
+                        allWinningMoves.add(new Integer[] {i,1});
+                    }
+                }
+            }
+
+            // Left and right columns check
+            String midColumn;
+            for (int i = 0; i < 3; i+=2) {
+                midColumn = gameBoard[1][i];
+
+                if (midColumn.equals(symbol)) {
+                    if (gameBoard[0][i].equals(midColumn)) {
+                        allWinningMoves.add(new Integer[] {2,i});
+                    } else if (gameBoard[2][i].equals(midColumn)) {
+                        allWinningMoves.add(new Integer[] {0,i});
+                    }
+                }
+
+                if (midColumn.equals(" ")) {
+                    if (gameBoard[0][i].equals(symbol) && gameBoard[2][i].equals(symbol)) {
+                        allWinningMoves.add(new Integer[] {1,i});
+                    }
+                }
+            }
+
+            return allWinningMoves;
+        }
+
+
+    }
+  learner_created: true
+- name: src/tictactoeWithAI/Minimax.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/81/stages/451/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Wed, 05 May 2021 18:14:05 UTC
 record: -1

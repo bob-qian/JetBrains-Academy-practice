@@ -22,6 +22,8 @@ public class AI implements TTTPlayer {
             makeMoveEasy(game);
         } else if (this.difficulty.equals("medium")) {
             makeMoveMedium(game);
+        } else {
+            makeMoveHard(game);
         }
         System.out.println(game);
     }
@@ -74,6 +76,14 @@ public class AI implements TTTPlayer {
 
         // Otherwise, it makes a random move
         makeMoveEasy(game);
+    }
+
+    // Makes a "hard" move according to minimax algorithm
+    private void makeMoveHard(Game game) {
+        int moveIndex = Integer.parseInt(Minimax.findMinimaxMove(game, this));
+        int row = (moveIndex / 3) + 1;
+        int col = (moveIndex % 3) + 1;
+        game.addCoordinates(row, col, this.symbol);
     }
 
     public String getSymbol() {

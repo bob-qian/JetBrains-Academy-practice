@@ -324,5 +324,26 @@ public class Game {
         return allWinningMoves;
     }
 
+    // Returns internal gameBoard as a 1D String array instead of a 2D String array
+    // (Needed for minimax algorithm implementation)
+    protected String[] toStringArray() {
+        String[] output = new String[9];
+        for (int i = 0; i < 9; i++) {
+            if (i < 3) {
+                output[i] = gameBoard[0][i];
+            } else if (i < 6) {
+                output[i] = gameBoard[1][i-3];
+            } else {
+                output[i] = gameBoard[2][i-6];
+            }
+        }
+
+        for (int i = 0; i < 9; i++) {
+            if (output[i].equals(" ")) {
+                output[i] = String.valueOf(i);
+            }
+        }
+        return output;
+    }
 
 }

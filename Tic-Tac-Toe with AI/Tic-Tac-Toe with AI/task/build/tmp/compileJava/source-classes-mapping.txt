@@ -1,3 +1,6 @@
+tictactoeWithAI/Minimax.java
+ tictactoeWithAI.Minimax
+ tictactoeWithAI.Minimax$Move
 tictactoeWithAI/TTTPlayer.java
  tictactoeWithAI.TTTPlayer
 tictactoeWithAI/Main.java
