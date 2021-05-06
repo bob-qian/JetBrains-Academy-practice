@@ -1,5 +1,25 @@
 [1;31m
 Start test 1[0m
+> auth
+shttps://accounts.spotify.com/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&redirect_uri=http://bobqian.com
+---SUCCESS---
+> exit
+---GOODBYE!---
+[1;31m
+Start test 2[0m
+> new
+)Please, provide access for application.
+> exit
+[1;31m
+Start test 3[0m
+> featured
+)Please, provide access for application.
+> exit
+[1;31m
+Start test 4[0m
+> auth
+shttps://accounts.spotify.com/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&redirect_uri=http://bobqian.com
+---SUCCESS---
 > new
 ---NEW RELEASES---
 "Mountains [Sia, Diplo, Labrinth]
@@ -12,17 +32,5 @@
 Wake Up and Smell the Coffee
 Monday Motivation
 Songs to Sing in the Shower
-> categories
----CATEGORIES---
-Top Lists
-Pop
-Mood
-Latin
-> playlists Mood
----MOOD PLAYLISTS---
-Walk Like A Badass
-Rage Beats
-Arab Mood Booster
-Sunday Stroll
 > exit
 ---GOODBYE!---

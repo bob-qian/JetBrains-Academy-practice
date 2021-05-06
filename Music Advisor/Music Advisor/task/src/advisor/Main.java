@@ -6,31 +6,51 @@ public class Main {
     public static void main(String[] args) {
         Scanner scnr = new Scanner(System.in);
 
+        String authLink = "https://accounts.spotify.com/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&redirect_uri=http://bobqian.com";
+        Boolean authVerified = false;
+
         while (true) {
             String userInput = scnr.nextLine();
 
-            if (userInput.equals("exit")) {
-                System.out.println("---GOODBYE!---");
+            if (userInput.equals("auth")) {
+                System.out.println(authLink);
+                authVerified = true;
+                System.out.println("---SUCCESS---");
                 break;
+            } else if (userInput.equals("exit")) {
+                break;
+            } else {
+                System.out.println("Please, provide access for application.");
             }
+        }
 
-            switch (userInput) {
-                case "new":
-                    displayNewReleases();
+        if (authVerified) {
+            while (true) {
+                String userInput = scnr.nextLine();
+
+                if (userInput.equals("exit")) {
+                    System.out.println("---GOODBYE!---");
                     break;
-                case "featured":
-                    displayFeaturedPlaylists();
-                    break;
-                case "categories":
-                    displayCategories();
-                    break;
-                case "playlists Mood":
-                    System.out.println("---MOOD PLAYLISTS---");
-                    System.out.println("Walk Like A Badass");
-                    System.out.println("Rage Beats");
-                    System.out.println("Arab Mood Booster");
-                    System.out.println("Sunday Stroll");
-                    break;
+                }
+
+                switch (userInput) {
+                    case "new":
+                        displayNewReleases();
+                        break;
+                    case "featured":
+                        displayFeaturedPlaylists();
+                        break;
+                    case "categories":
+                        displayCategories();
+                        break;
+                    case "playlists Mood":
+                        System.out.println("---MOOD PLAYLISTS---");
+                        System.out.println("Walk Like A Badass");
+                        System.out.println("Rage Beats");
+                        System.out.println("Arab Mood Booster");
+                        System.out.println("Sunday Stroll");
+                        break;
+                }
             }
         }
     }
