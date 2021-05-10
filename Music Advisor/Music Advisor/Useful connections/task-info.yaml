@@ -303,6 +303,18 @@ files:
         }
     }
   learner_created: false
+- name: src/advisor/MyServer.java
+  visible: true
+  learner_created: true
+- name: src/advisor/Auth.java
+  visible: true
+  learner_created: true
+- name: src/advisor/PrivateConfig.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/62/stages/337/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Mon, 10 May 2021 22:31:58 UTC
 record: -1

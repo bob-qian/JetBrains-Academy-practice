@@ -1,31 +1,22 @@
 [1;31m
 Start test 1[0m
+http://127.0.0.1:45678
+http://127.0.0.1:45678
+http://localhost:8080
+ƒhttp://127.0.0.1:45678/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&response_type=code&redirect_uri=http://localhost:8080
 > auth
-shttps://accounts.spotify.com/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&redirect_uri=http://bobqian.com
++use this link to request the access code:
+ƒhttp://127.0.0.1:45678/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&response_type=code&redirect_uri=http://localhost:8080
+waiting for code...
+@Tester: making requests to redirect uri: http://localhost:8080
+BTester: done request 1: Authorization code not found. Try again.
+BTester: done request 2: Authorization code not found. Try again.
+DTester: done request 3: Got the code. Return back to your program.
+code received
+)making http request for access_token...
+response:
+g{"access_token":"456456","token_type":"Bearer","expires_in":3600,"refresh_token":"567567","scope":""}
 ---SUCCESS---
-> exit
----GOODBYE!---
-[1;31m
-Start test 2[0m
-> new
-)Please, provide access for application.
-> exit
-[1;31m
-Start test 3[0m
-> featured
-)Please, provide access for application.
-> exit
-[1;31m
-Start test 4[0m
-> auth
-shttps://accounts.spotify.com/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&redirect_uri=http://bobqian.com
----SUCCESS---
-> new
----NEW RELEASES---
-"Mountains [Sia, Diplo, Labrinth]
-Runaway [Lil Peep]
-)The Greatest Show [Panic! At The Disco]
-All Out Life [Slipknot]
 > featured
 ---FEATURED---
 Mellow Morning
@@ -34,3 +25,21 @@
 Songs to Sing in the Shower
 > exit
 ---GOODBYE!---
+[1;31m
+Start test 2[0m
+http://127.0.0.1:45678
+http://127.0.0.1:45678
+http://localhost:8080
+ƒhttp://127.0.0.1:45678/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&response_type=code&redirect_uri=http://localhost:8080
+> featured
+)Please, provide access for application.
+> exit
+[1;31m
+Start test 3[0m
+http://127.0.0.1:45678
+http://127.0.0.1:45678
+http://localhost:8080
+ƒhttp://127.0.0.1:45678/authorize?client_id=6fd95ac46e9841c5acd0b107f5ebfbeb&response_type=code&redirect_uri=http://localhost:8080
+> new
+)Please, provide access for application.
+> exit

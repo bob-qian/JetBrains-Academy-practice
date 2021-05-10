@@ -1,2 +1,10 @@
+advisor/MyServer.java
+ advisor.MyServer
+ advisor.MyServer$1
+advisor/PrivateConfig.java
+ advisor.PrivateConfig
 advisor/Main.java
  advisor.Main
+advisor/Auth.java
+ advisor.Auth
+ advisor.Auth$1

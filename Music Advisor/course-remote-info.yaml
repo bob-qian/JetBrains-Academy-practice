@@ -3,17 +3,17 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/210107/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Thu, 01 Jan 1970 00:00:00 UTC
+update_date: Mon, 10 May 2021 21:24:32 UTC
 stages:
 - id: 335
   step: 5477
   is_completed: true
 - id: 336
   step: 5478
-  is_completed: false
+  is_completed: true
 - id: 337
   step: 5479
-  is_completed: false
+  is_completed: true
 - id: 338
   step: 5480
   is_completed: false
@@ -22,6 +22,8 @@ stages:
   is_completed: false
 topics:
   0:
+  - title: JVM, JRE, and JDK
+    theory_id: 3499
   - title: Units of information
     theory_id: 6865
   - title: IDE
@@ -76,8 +78,6 @@ topics:
     theory_id: 3504
   - title: Write, compile, and run
     theory_id: 3739
-  - title: JVM, JRE, and JDK
-    theory_id: 3499
   - title: Build tools
     theory_id: 4284
   - title: Sizes and ranges
